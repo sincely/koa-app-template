@@ -1,0 +1,15 @@
+{
+  "restartable": "rs",
+  "ignore": [".git", ".svn", "node_modules/**/node_modules"],
+  "verbose": true,
+  "watch": [],
+  "env": {
+    "NODE_ENV": "development",
+    "REMOTE_ADDR": ""
+  },
+  "env_dev": {
+    "NODE_ENV": "development",
+    "REMOTE_ADDR": ""
+  },
+  "ext": "ejs js json"
+}
