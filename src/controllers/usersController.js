@@ -16,7 +16,7 @@ const login = async (ctx) => {
   }
 
   // 连接数据库根据用户名和密码查询用户信息
-  const user = await userDao.Login(userName, password)
+  const user = await userDao.login(userName, password)
   // 结果集长度为0则代表没有该用户
   if (user.length === 0) {
     ctx.status = HTTP_CODE.OK
@@ -73,7 +73,7 @@ const findUserName = async (ctx) => {
   }
 
   // 连接数据库根据用户名查询用户信息
-  const user = await userDao.FindUserName(userName)
+  const user = await userDao.findUserName(userName)
   // 结果集长度为0则代表不存在该用户,可以注册
   if (user.length === 0) {
     ctx.status = HTTP_CODE.OK
@@ -119,7 +119,7 @@ const register = async (ctx) => {
 
   // 连接数据库根据用户名查询用户信息
   // 先判断该用户是否存在
-  const user = await userDao.FindUserName(userName)
+  const user = await userDao.findUserName(userName)
 
   if (user.length !== 0) {
     ctx.status = HTTP_CODE.OK
@@ -131,7 +131,7 @@ const register = async (ctx) => {
   }
 
   // 连接数据库插入用户信息
-  const registerResult = await userDao.Register(userName, password)
+  const registerResult = await userDao.register(userName, password)
   // 操作所影响的记录行数为1,则代表注册成功
   if (registerResult.affectedRows === 1) {
     ctx.status = HTTP_CODE.OK

@@ -1,13 +1,8 @@
-import Router from 'koa-router'
+import Router from '@koa/router'
 import usersRouter from './router/usersRouter.js'
-import { getOpenApiSpec } from '../docs/openapi.js'
+import { ApiPrefix } from '../config/setting.js'
 
-const router = new Router()
-router.get('/openapi.json', (ctx) => {
-  ctx.status = 200
-  ctx.type = 'application/json'
-  ctx.body = getOpenApiSpec({ routers: [Routers, usersRouter], origin: ctx.origin })
-})
+const router = new Router({ prefix: ApiPrefix })
 router.get('/ping', (ctx) => {
   ctx.body = {
     status: ctx.status,
@@ -16,5 +11,6 @@ router.get('/ping', (ctx) => {
 })
 
 router.use(usersRouter.routes())
+router.use(usersRouter.allowedMethods())
 
 export default router

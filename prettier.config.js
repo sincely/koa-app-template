@@ -2,7 +2,7 @@ export default {
   trailingComma: 'none',
   tabWidth: 2,
   semi: false,
-  printWidth: 100,
+  printWidth: 120,
   singleQuote: true,
   bracketSpacing: true,
   htmlWhitespaceSensitivity: 'ignore',

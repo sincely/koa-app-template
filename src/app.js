@@ -2,7 +2,6 @@ import Koa from 'koa'
 import KoaStatic from 'koa-static'
 import KoaBody from 'koa-body'
 import Session from 'koa-session'
-import { koaSwagger } from 'koa2-swagger-ui'
 
 import { Port, staticDir } from './config/setting.js'
 import logger from './config/logger.js'
@@ -50,16 +49,6 @@ app.use(async (ctx, next) => {
 // 处理请求体数据
 import koaBodyConfig from './middleware/koaBodyConfig.js'
 app.use(KoaBody(koaBodyConfig))
-
-// Swagger UI (OpenAPI)
-app.use(
-  koaSwagger({
-    routePrefix: '/docs',
-    swaggerOptions: {
-      url: '/openapi.json'
-    }
-  })
-)
 
 // 使用路由中间件
 import Routers from './routers/index.js'

@@ -37,3 +37,15 @@ export const dbConfig = {
 
 export const TokenSecret = 'koa-app-template-secret'
 export const TokenExpire = '1h'
+
+const normalizePrefix = (value) => {
+  const raw = String(value ?? '').trim()
+  if (!raw) {
+    return ''
+  }
+  const withLeadingSlash = raw.startsWith('/') ? raw : `/${raw}`
+  return withLeadingSlash.endsWith('/') ? withLeadingSlash.slice(0, -1) : withLeadingSlash
+}
+
+// API 路由统一前缀：默认空（不破坏现有路由），可通过环境变量开启，例如 API_PREFIX=/api
+export const ApiPrefix = normalizePrefix(process.env.API_PREFIX)

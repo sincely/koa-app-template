@@ -27,7 +27,7 @@ async function permissions(ctx, next) {
         `
         SELECT path FROM RouteAuth
         JOIN RoleRoute ON RouteAuth.id = RoleRoute.routeId
-        WHERE RoleRoute.roleId = ${user.roleId}
+        WHERE RoleRoute.roleId = ?
       `,
         [user.roleId]
       )
@@ -47,7 +47,6 @@ async function permissions(ctx, next) {
   // SELECT path FROM RouteAuth
   // JOIN RoleRoute ON RouteAuth.id = RoleRoute.routeId
   // WHERE RoleRoute.roleId = 1
-  await next()
 }
 
 export default permissions

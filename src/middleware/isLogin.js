@@ -1,3 +1,5 @@
+import { ApiPrefix } from '../config/setting.js'
+
 export default async (ctx, next) => {
   if (ctx.url.startsWith('/user/')) {
     if (!ctx.session.user) {

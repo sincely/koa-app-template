@@ -26,8 +26,7 @@ export const BUSINESS_MSG = {
   [BUSINESS_CODE.PARAM_ERROR]: '参数错误',
   [BUSINESS_CODE.USER_PARAM_MISSING]: '用户名或密码不能为空',
   [BUSINESS_CODE.USER_NAME_INVALID]: '用户名不合法(以字母开头，允许5-16字节，允许字母数字下划线)',
-  [BUSINESS_CODE.PASSWORD_INVALID]:
-    '密码不合法(以字母开头，长度在6~18之间，只能包含字母、数字和下划线)',
+  [BUSINESS_CODE.PASSWORD_INVALID]: '密码不合法(以字母开头，长度在6~18之间，只能包含字母、数字和下划线)',
   [BUSINESS_CODE.USER_NOT_FOUND]: '用户不存在',
   [BUSINESS_CODE.USER_EXIST]: '用户已存在',
   [BUSINESS_CODE.USER_LOGIN_FAIL]: '用户名或密码错误'

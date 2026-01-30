@@ -1,4 +1,4 @@
-async function responseFormatter(ctx, next) {
+const responseFormatter = async (ctx, next) => {
   try {
     await next()
 
