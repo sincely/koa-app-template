@@ -4,7 +4,7 @@ import { HTTP_CODE } from '../config/httpError.js'
 import { BUSINESS_CODE, BUSINESS_MSG } from '../config/businessCode.js'
 import { userSchema, userNameSchema } from '../validators/usersValidator.js'
 
-export const Login = async (ctx) => {
+const login = async (ctx) => {
   const { userName, password } = ctx.request.body
 
   // 校验用户信息是否符合规则
@@ -61,7 +61,7 @@ export const Login = async (ctx) => {
  * 查询是否存在某个用户名,用于注册时前端校验
  * @param {Object} ctx
  */
-export const FindUserName = async (ctx) => {
+const findUserName = async (ctx) => {
   const { userName } = ctx.request.body
 
   // 校验用户名是否符合规则
@@ -106,7 +106,7 @@ export const FindUserName = async (ctx) => {
   }
 }
 
-export const Register = async (ctx) => {
+const register = async (ctx) => {
   const { userName, password } = ctx.request.body
 
   // 校验用户信息是否符合规则
@@ -147,4 +147,10 @@ export const Register = async (ctx) => {
     code: BUSINESS_CODE.ERROR,
     msg: '未知错误，注册失败'
   }
+}
+
+export default {
+  login,
+  findUserName,
+  register
 }

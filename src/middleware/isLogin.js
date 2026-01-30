@@ -1,10 +1,3 @@
-/*
- * @Description: 判断用户是否登录
- * @Author: hai-27
- * @Date: 2020-03-14 23:18:05
- * @LastEditors: hai-27
- * @LastEditTime: 2020-03-14 23:45:10
- */
 export default async (ctx, next) => {
   if (ctx.url.startsWith('/user/')) {
     if (!ctx.session.user) {

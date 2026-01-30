@@ -1,11 +1,12 @@
 import Router from 'koa-router'
 // 导入控制层
-import { Login, FindUserName, Register } from '../../controllers/usersController.js'
+import User from '../../controllers/usersController.js'
 
 const usersRouter = new Router()
+
 usersRouter
-  .post('/users/login', Login)
-  .post('/users/findUserName', FindUserName)
-  .post('/users/register', Register)
+  .post('/users/login', User.login)
+  .post('/users/findUserName', User.findUserName)
+  .post('/users/register', User.register)
 
 export default usersRouter
