@@ -1,0 +1,300 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Koa App Template API",
+    "version": "1.0.0",
+    "description": "Koa 应用模板接口文档 - 基于 Koa.js 框架构建的 RESTful API 服务",
+    "contact": {
+      "name": "koa-api",
+      "email": "1738248438@qq.com",
+      "url": "https://github.com/your-repo/koa-app-template"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "开发环境"
+    },
+    {
+      "url": "http://test.api.example.com",
+      "description": "测试环境"
+    },
+    {
+      "url": "http://api.example.com",
+      "description": "生产环境"
+    }
+  ],
+  "tags": [
+    {
+      "name": "订单模块",
+      "description": "订单模块相关接口"
+    },
+    {
+      "name": "用户模块",
+      "description": "用户模块相关接口"
+    }
+  ],
+  "paths": {
+    "/order/login": {
+      "post": {
+        "tags": [
+          "订单模块"
+        ],
+        "summary": "用户登录",
+        "description": "验证用户名和密码，登录成功后将用户信息保存到 session",
+        "operationId": "post__order_login",
+        "responses": {
+          "200": {
+            "description": "登录成功返回用户信息",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "description": "业务状态码"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "description": "响应消息"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "响应数据"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "userName",
+                  "password"
+                ],
+                "properties": {
+                  "userName": {
+                    "type": "string",
+                    "example": "testuser",
+                    "description": "用户名（以字母开头，允许5-16字节，允许字母数字下划线）"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "Test123456",
+                    "description": "密码（以字母开头，长度在6~18之间，只能包含字母、数字和下划线）"
+                  }
+                }
+              },
+              "example": {
+                "userName": "testuser",
+                "password": "Test123456"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/findUserName": {
+      "post": {
+        "tags": [
+          "用户模块"
+        ],
+        "summary": "查询用户名是否存在",
+        "description": "查询数据库中是否已存在指定用户名，用于注册前的前端校验",
+        "operationId": "post__user_findUserName",
+        "responses": {
+          "200": {
+            "description": "查询结果",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "description": "业务状态码"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "description": "响应消息"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "响应数据"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "userName"
+                ],
+                "properties": {
+                  "userName": {
+                    "type": "string",
+                    "example": "testuser",
+                    "description": "要查询的用户名"
+                  }
+                }
+              },
+              "example": {
+                "userName": "testuser"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/register": {
+      "post": {
+        "tags": [
+          "用户模块"
+        ],
+        "summary": "用户注册",
+        "description": "注册新用户，会先检查用户名是否已存在，不存在则创建新用户",
+        "operationId": "post__user_register",
+        "responses": {
+          "200": {
+            "description": "注册结果",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "description": "业务状态码"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "description": "响应消息"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "响应数据"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "userName",
+                  "password"
+                ],
+                "properties": {
+                  "userName": {
+                    "type": "string",
+                    "example": "testuser",
+                    "description": "用户名（以字母开头，允许5-16字节，允许字母数字下划线）"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "Test123456",
+                    "description": "密码（以字母开头，长度在6~18之间，只能包含字母、数字和下划线）"
+                  }
+                }
+              },
+              "example": {
+                "userName": "testuser",
+                "password": "Test123456"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "tags": [
+          "用户模块"
+        ],
+        "summary": "用户登录",
+        "description": "验证用户名和密码，登录成功后将用户信息保存到 session",
+        "operationId": "post__user_login",
+        "responses": {
+          "200": {
+            "description": "登录成功返回用户信息",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "description": "业务状态码"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "description": "响应消息"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "响应数据"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "userName",
+                  "password"
+                ],
+                "properties": {
+                  "userName": {
+                    "type": "string",
+                    "example": "testuser",
+                    "description": "用户名（以字母开头，允许5-16字节，允许字母数字下划线）"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "Test123456",
+                    "description": "密码（以字母开头，长度在6~18之间，只能包含字母、数字和下划线）"
+                  }
+                }
+              },
+              "example": {
+                "userName": "testuser",
+                "password": "Test123456"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

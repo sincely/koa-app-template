@@ -99,6 +99,7 @@ export default [
       '.d.ts',
       '*.sh',
       '**/node_modules',
+      '**/docs/assets/**',
       '*.md',
       '*.woff',
       '*.woff2',
