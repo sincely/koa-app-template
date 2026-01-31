@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.0.2](https://github.com/sincely/koa-app-template/compare/v1.0.1...v1.0.2) (2026-01-31)
+
+### ✨ Features
+
+* 集成swagger-jsdoc并添加ShowDoc自动同步功能 ([8b9d75b](https://github.com/sincely/koa-app-template/commit/8b9d75bab0ed0bf6716e5d53796f67847c245abb))
+* 添加 API 前缀配置并更新依赖项 ([ae384d9](https://github.com/sincely/koa-app-template/commit/ae384d9cfc466f0a5d31e9ef8b41b724d15667ed))
+* 添加 OpenAPI 文档生成脚本及用户/订单控制器 ([be55c76](https://github.com/sincely/koa-app-template/commit/be55c76d061649110c08c2d25c4cf9f0e9343647))
+
+### ♻️ Code Refactoring
+
+* 修改用户控制器导出方式，统一使用小写命名；更新路由文件以匹配新导出 ([a5231a9](https://github.com/sincely/koa-app-template/commit/a5231a9eb3bea65e5d3cf6a5eb37ff04b986971a))
+
+### 🤖 Continuous Integration
+
+* 禁用由main/master分支推送触发的发布流程 ([34e852c](https://github.com/sincely/koa-app-template/commit/34e852c1cecbb0429ee4c276cb7b5ca8c04f762e))
+
 ## 1.0.1 (2026-01-29)
 
 ### 🎉 init
