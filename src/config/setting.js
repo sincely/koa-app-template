@@ -35,9 +35,8 @@ export const dbConfig = {
   database: process.env.DB_NAME // 数据库名称
 }
 
-export const TokenSecret = 'koa-app-template-secret'
-export const TokenExpire = '1h'
-
+export const TokenSecret = process.env.JWT_SECRET
+export const TokenExpire = process.env.JWT_EXPIRES_IN || '7d' // 默认7天
 // 文档服务配置
 const docsPortFromEnv = Number.parseInt(String(process.env.DOCS_PORT ?? ''), 10)
 export const DocsPort = Number.isFinite(docsPortFromEnv) ? docsPortFromEnv : 4000 // 文档服务端口
@@ -51,6 +50,3 @@ const normalizePrefix = (value) => {
   const withLeadingSlash = raw.startsWith('/') ? raw : `/${raw}`
   return withLeadingSlash.endsWith('/') ? withLeadingSlash.slice(0, -1) : withLeadingSlash
 }
-
-// API 路由统一前缀：默认空（不破坏现有路由），可通过环境变量开启，例如 API_PREFIX=/api
-export const ApiPrefix = normalizePrefix(process.env.API_PREFIX)

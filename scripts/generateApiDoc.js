@@ -32,7 +32,7 @@ const __dirname = path.dirname(__filename)
 const CONFIG = {
   controllersDir: path.resolve(__dirname, '../src/controllers'),
   outputFile: path.resolve(__dirname, '../docs/openapi.json'),
-  apiPrefix: process.env.API_PREFIX || '',
+  apiPrefix: '',
   // 完整的项目信息配置（Apifox 会导入这些信息）
   projectInfo: {
     title: 'Koa App Template API',

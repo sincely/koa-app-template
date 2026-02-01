@@ -1,33 +1,37 @@
 import jwt from 'jsonwebtoken'
+
+import { verifyToken } from '../utils/jwt.js'
 import { TokenSecret } from '../config/setting.js'
+import { createErrorResponse } from '../utils/createResponse.js'
 
 async function authenticate(ctx, next) {
-  // 允许 session 作为兜底（与现有 app.js 的 session 体系兼容）
-  if (ctx.session && ctx.session.user) {
-    ctx.state.user = ctx.session.user
-    await next()
+  // 从请求头获取 Token
+  const authorization = ctx.headers.authorization
+
+  if (!authorization) {
+    ctx.status = 401
+    ctx.body = createErrorResponse('未登录或登录已过期', 401)
     return
   }
 
-  const xAccessToken = ctx.headers['x-access-token']
-  const authHeader = ctx.headers.authorization
-  const bearerToken = authHeader && authHeader.toLowerCase().startsWith('bearer ') ? authHeader.slice(7) : undefined
-  const token = bearerToken || xAccessToken
-
+  // 校验 Token 格式 (Bearer <token>)
+  const token = authorization && authorization.toLowerCase().startsWith('bearer ') ? authorization.slice(7) : undefined
   if (!token) {
     ctx.status = 401
-    ctx.body = { message: 'Unauthorized' }
+    ctx.body = createErrorResponse('Token 格式错误', 401)
     return
   }
 
-  try {
-    const user = jwt.verify(token, TokenSecret)
-    ctx.state.user = user
-    await next()
-  } catch {
+  // 验证 Token
+  const decoded = verifyToken(token)
+  if (!decoded) {
     ctx.status = 401
-    ctx.body = { message: 'Unauthorized' }
+    ctx.body = createErrorResponse('Token 无效或已过期', 401)
+    return
   }
+  // 将解码后的用户信息存储在 ctx.state.user 中，供后续中间件和路由使用
+  ctx.state.user = decoded
+  await next()
 }
 
 export default authenticate

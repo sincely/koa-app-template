@@ -1,16 +1,15 @@
 import Router from '@koa/router'
 import usersRouter from './router/usersRouter.js'
-import { ApiPrefix } from '../config/setting.js'
 
-const router = new Router({ prefix: ApiPrefix })
-router.get('/ping', (ctx) => {
+const router = new Router({ prefix: '/api' })
+// 健康检查
+router.get('/health', (ctx) => {
   ctx.body = {
-    status: ctx.status,
-    message: 'success'
+    status: 'ok',
+    timestamp: new Date().toISOString()
   }
 })
 
-router.use(usersRouter.routes())
-router.use(usersRouter.allowedMethods())
+router.use(usersRouter.routes(), usersRouter.allowedMethods())
 
 export default router

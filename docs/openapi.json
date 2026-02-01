@@ -30,23 +30,19 @@
   ],
   "tags": [
     {
-      "name": "订单模块",
-      "description": "订单模块相关接口"
-    },
-    {
       "name": "用户模块",
       "description": "用户模块相关接口"
     }
   ],
   "paths": {
-    "/order/login": {
+    "/user/login": {
       "post": {
         "tags": [
-          "订单模块"
+          "用户模块"
         ],
         "summary": "用户登录",
         "description": "验证用户名和密码，登录成功后将用户信息保存到 session",
-        "operationId": "post__order_login",
+        "operationId": "post__user_login",
         "responses": {
           "200": {
             "description": "登录成功返回用户信息",
@@ -175,72 +171,6 @@
         "responses": {
           "200": {
             "description": "注册结果",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "integer",
-                      "description": "业务状态码"
-                    },
-                    "msg": {
-                      "type": "string",
-                      "description": "响应消息"
-                    },
-                    "data": {
-                      "type": "object",
-                      "description": "响应数据"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "userName",
-                  "password"
-                ],
-                "properties": {
-                  "userName": {
-                    "type": "string",
-                    "example": "testuser",
-                    "description": "用户名（以字母开头，允许5-16字节，允许字母数字下划线）"
-                  },
-                  "password": {
-                    "type": "string",
-                    "example": "Test123456",
-                    "description": "密码（以字母开头，长度在6~18之间，只能包含字母、数字和下划线）"
-                  }
-                }
-              },
-              "example": {
-                "userName": "testuser",
-                "password": "Test123456"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user/login": {
-      "post": {
-        "tags": [
-          "用户模块"
-        ],
-        "summary": "用户登录",
-        "description": "验证用户名和密码，登录成功后将用户信息保存到 session",
-        "operationId": "post__user_login",
-        "responses": {
-          "200": {
-            "description": "登录成功返回用户信息",
             "content": {
               "application/json": {
                 "schema": {
