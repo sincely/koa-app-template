@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.0.3](https://github.com/sincely/koa-app-template/compare/v1.0.2...v1.0.3) (2026-02-01)
+
+### ✨ Features
+
+* 添加 Vercel 部署配置，更新服务器启动逻辑以支持无服务器环境 ([8d3ae3e](https://github.com/sincely/koa-app-template/commit/8d3ae3e4b78b84979e3c6755b389feadd62c3921))
+* 添加文档服务配置，包括端口和目录设置 ([82d4016](https://github.com/sincely/koa-app-template/commit/82d4016500574f91b456f3efe4ee664a27b8c9e4))
+* 移除环境变量中的 GITHUB_TOKEN 配置 ([cb31dbe](https://github.com/sincely/koa-app-template/commit/cb31dbe72a65606ee310597bb231a9d959986720))
+
 ## [1.0.2](https://github.com/sincely/koa-app-template/compare/v1.0.1...v1.0.2) (2026-01-31)
 
 ### ✨ Features
