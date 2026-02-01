@@ -66,11 +66,19 @@ docsApp.use(async (ctx, next) => {
 docsApp.use(KoaStatic(docsDir))
 
 // 监听服务器启动端口
-app.listen(Port, () => {
-  logger.info(`服务器启动在 http://localhost:${Port}`)
-})
+// 仅在非 Vercel 环境下启动服务器
+// 本地开发：process.env.VERCEL 为 undefined（falsy），!process.env.VERCEL 为 true → 执行 app.listen()
+// Vercel 部署：process.env.VERCEL 为 "1"（truthy），!process.env.VERCEL 为 false → 跳过 app.listen()
+if (!process.env.VERCEL) {
+  app.listen(Port, () => {
+    logger.info(`服务器启动在 http://localhost:${Port}`)
+  })
 
-// 启动文档服务
-docsApp.listen(DocsPort, () => {
-  logger.info(`接口文档服务启动在 http://localhost:${DocsPort}`)
-})
+  // 启动文档服务
+  docsApp.listen(DocsPort, () => {
+    logger.info(`接口文档服务启动在 http://localhost:${DocsPort}`)
+  })
+}
+
+// 导出 app 实例，用于 Vercel 等 serverless 平台部署
+export default app
