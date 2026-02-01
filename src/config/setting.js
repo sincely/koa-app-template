@@ -38,6 +38,11 @@ export const dbConfig = {
 export const TokenSecret = 'koa-app-template-secret'
 export const TokenExpire = '1h'
 
+// 文档服务配置
+const docsPortFromEnv = Number.parseInt(String(process.env.DOCS_PORT ?? ''), 10)
+export const DocsPort = Number.isFinite(docsPortFromEnv) ? docsPortFromEnv : 4000 // 文档服务端口
+export const docsDir = path.resolve(__dirname, '../../docs') // 文档目录
+
 const normalizePrefix = (value) => {
   const raw = String(value ?? '').trim()
   if (!raw) {

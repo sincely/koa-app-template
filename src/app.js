@@ -3,10 +3,11 @@ import KoaStatic from 'koa-static'
 import KoaBody from 'koa-body'
 import Session from 'koa-session'
 
-import { Port, staticDir } from './config/setting.js'
+import { Port, staticDir, DocsPort, docsDir } from './config/setting.js'
 import logger from './config/logger.js'
 
 const app = new Koa()
+const docsApp = new Koa() // 文档服务实例
 
 // HTTP请求日志中间件
 import loggerMiddleware from './middleware/logger.js'
@@ -54,7 +55,22 @@ app.use(KoaBody(koaBodyConfig))
 import Routers from './routers/index.js'
 app.use(Routers.routes()).use(Routers.allowedMethods())
 
+// 配置文档服务 (docsify)
+docsApp.use(async (ctx, next) => {
+  // 默认访问 index.html
+  if (ctx.path === '/') {
+    ctx.path = '/index.html'
+  }
+  await next()
+})
+docsApp.use(KoaStatic(docsDir))
+
 // 监听服务器启动端口
 app.listen(Port, () => {
   logger.info(`服务器启动在 http://localhost:${Port}`)
+})
+
+// 启动文档服务
+docsApp.listen(DocsPort, () => {
+  logger.info(`接口文档服务启动在 http://localhost:${DocsPort}`)
 })
