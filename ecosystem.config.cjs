@@ -32,6 +32,30 @@ module.exports = {
       out_file: './logs/app-out.log',
       merge_logs: true,
       log_date_format: 'YYYY-MM-DD HH:mm:ss'
+    },
+    {
+      name: 'koa-worker-test',
+      script: './src/worker.js',
+      instances: 1, // Worker 通常不需要多实例，除非负载很高且任务无状态
+      exec_mode: 'fork',
+      watch: false,
+      env: {
+        NODE_ENV: 'test'
+      },
+      error_file: './logs/worker-err.log',
+      out_file: './logs/worker-out.log'
+    },
+    {
+      name: 'koa-worker-prod',
+      script: './src/worker.js',
+      instances: 1,
+      exec_mode: 'fork',
+      watch: false,
+      env: {
+        NODE_ENV: 'production'
+      },
+      error_file: './logs/worker-err.log',
+      out_file: './logs/worker-out.log'
     }
   ]
 }

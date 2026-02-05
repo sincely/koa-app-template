@@ -19,10 +19,12 @@ if (fs.existsSync(envFilePath)) {
   dotenv.config()
 }
 
+// 应用配置
 const portFromEnv = Number.parseInt(String(process.env.PORT ?? ''), 10)
 export const Port = Number.isFinite(portFromEnv) ? portFromEnv : 8080 // 启动端口
 export const staticDir = path.resolve(__dirname, '../../public') // 静态资源路径
 export const uploadDir = path.join(__dirname, '../../public/') // 上传文件路径
+
 // 数据库连接设置
 export const dbConfig = {
   connectionLimit: 10, // 最大连接数，默认为10
@@ -35,13 +37,24 @@ export const dbConfig = {
   database: process.env.DB_NAME // 数据库名称
 }
 
+// Redis 配置
+export const redisConfig = {
+  host: process.env.REDIS_HOST || '127.0.0.1',
+  port: Number.parseInt(process.env.REDIS_PORT || '6379', 10),
+  password: process.env.REDIS_PASSWORD || null,
+  db: Number.parseInt(process.env.REDIS_DB || '0', 10)
+}
+
+// JWT 配置
 export const TokenSecret = process.env.JWT_SECRET
 export const TokenExpire = process.env.JWT_EXPIRES_IN || '7d' // 默认7天
+
 // 文档服务配置
 const docsPortFromEnv = Number.parseInt(String(process.env.DOCS_PORT ?? ''), 10)
 export const DocsPort = Number.isFinite(docsPortFromEnv) ? docsPortFromEnv : 4000 // 文档服务端口
 export const docsDir = path.resolve(__dirname, '../../docs') // 文档目录
 
+// 辅助函数：标准化路径前缀
 const normalizePrefix = (value) => {
   const raw = String(value ?? '').trim()
   if (!raw) {
@@ -50,3 +63,6 @@ const normalizePrefix = (value) => {
   const withLeadingSlash = raw.startsWith('/') ? raw : `/${raw}`
   return withLeadingSlash.endsWith('/') ? withLeadingSlash.slice(0, -1) : withLeadingSlash
 }
+
+// 文档服务路径前缀
+export const DocsPrefix = normalizePrefix(process.env.DOCS_PREFIX) || '/docs'
