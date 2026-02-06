@@ -39,7 +39,6 @@ export const validateBody = (schema) => async (ctx, next) => {
  * @returns {import('koa').Middleware}
  */
 export const validateQuery = (schema) => async (ctx, next) => {
-  console.log(ctx)
   const parsed = schema.safeParse(ctx.query)
 
   if (!parsed.success) {

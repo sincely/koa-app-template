@@ -1,7 +1,4 @@
-import jwt from 'jsonwebtoken'
-
 import { verifyToken } from '../utils/jwt.js'
-import { TokenSecret } from '../config/setting.js'
 import { createErrorResponse } from '../utils/createResponse.js'
 
 async function authenticate(ctx, next) {

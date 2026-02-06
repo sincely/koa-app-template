@@ -1,129 +1,443 @@
 # 项目架构与技术栈说明
 
-## 1. 技术栈概览 (Technology Stack)
+## 1. 技术栈概览
 
-- **核心框架**: Koa2
-- **开发语言**: Node.js (ES Modules, 使用 Babel 编译)
-- **数据库**: MySQL (通过 `mysql2` 驱动和 `knex` 构建器)
-- **进程管理**: PM2 (支持集群模式 Cluster Mode)
-- **日志系统**: Pino / Pino-Http
-- **参数校验**: Joi
-- **接口文档**: Swagger / OpenAPI
-- **部署配置**: Ecosystem / PM2
+| 类别 | 技术 | 版本 | 说明 |
+|------|------|------|------|
+| **核心框架** | Koa2 | 2.16.x | 轻量级 Node.js Web 框架 |
+| **运行时** | Node.js | 22.x | ES Modules 原生支持 |
+| **数据库** | MySQL | 8.x | 关系型数据库 |
+| **查询构建器** | Knex.js | 3.x | SQL 查询构建器 |
+| **参数校验** | Zod | 4.x | TypeScript-first 验证库 |
+| **日志系统** | Pino | 10.x | 高性能 JSON 日志 |
+| **密码加密** | bcryptjs | 2.x | 密码哈希 |
+| **认证** | JWT | 8.x | JSON Web Token |
+| **进程管理** | PM2 | - | 生产环境进程管理 |
+| **任务队列** | Bull | 4.x | Redis 任务队列 |
 
-## 2. 系统架构设计 (System Architecture)
+---
 
-本项目采用经典的分层 MVC (Model-View-Controller) 架构，专为 API 服务优化。通过严格的职责分离，确保代码的可维护性和扩展性。
+## 2. 目录结构
+
+```
+src/
+├── app.js                 # 应用入口
+├── worker.js              # 后台任务 Worker
+├── config/                # 配置文件
+│   ├── setting.js         # 环境变量配置
+│   ├── knex.js            # 数据库连接
+│   ├── logger.js          # 日志配置
+│   ├── cors.js            # 跨域配置
+│   ├── koaBodyConfig.js   # 请求体解析配置
+│   ├── httpError.js       # HTTP 状态码
+│   └── businessCode.js    # 业务状态码
+├── middleware/            # Koa 中间件
+│   ├── authenticate.js    # JWT 认证
+│   ├── validationMiddleware.js  # Zod 验证
+│   ├── error.js           # 错误处理
+│   ├── logger.js          # 请求日志
+│   └── compress.js        # 响应压缩
+├── routers/               # 路由定义
+│   ├── index.js           # 路由入口
+│   └── router/
+│       └── usersRouter.js # 用户路由
+├── controllers/           # 控制器
+│   └── users/
+│       └── userController.js
+├── models/                # 数据模型
+│   └── dao/
+│       └── usersDao.js    # 用户数据访问
+├── schemas/               # Zod Schema 定义
+│   ├── authSchemas.js     # 认证相关
+│   └── models/
+│       └── userEntitySchema.js
+├── utils/                 # 工具函数
+│   ├── createResponse.js  # 响应格式化
+│   ├── password.js        # 密码加密
+│   ├── jwt.js             # JWT 工具
+│   └── db.js              # 数据库工具 (兼容旧代码)
+└── jobs/                  # 后台任务
+    ├── queue.js           # 队列定义
+    ├── scheduler.js       # 定时任务
+    └── processors/        # 任务处理器
+```
+
+---
+
+## 3. 系统架构
 
 ```mermaid
 graph TD
-    Client[客户端 / 前端] --> LB[负载均衡 / Nginx]
-    LB --> App[Koa 应用实例]
+    Client[客户端] --> Nginx[Nginx 负载均衡]
+    Nginx --> App[Koa 应用]
 
-    subgraph "Koa 应用层 (Application Layer)"
-        Middleware[全局中间件 Global Middleware]
-        Router[路由层 Router]
-        Controller[控制层 Controller]
-        Validator[验证层 Validator]
-        DAO[数据访问层 DAO]
-        Utils[工具库 Utils]
+    subgraph "Koa 应用层"
+        MW[中间件层] --> Router[路由层]
+        Router --> Valid[Zod 验证]
+        Valid --> Ctrl[控制器]
+        Ctrl --> DAO[数据访问层]
     end
 
-    App --> Middleware
-    Middleware --> Router
-    Router --> Controller
-    Controller --> Validator
-    Controller --> DAO
-    DAO --> DB[(MySQL 数据库)]
+    DAO --> DB[(MySQL)]
+    App --> Redis[(Redis)]
+    Worker[Worker 进程] --> Redis
 
-    style App fill:#f9f,stroke:#333,stroke-width:2px
-    style DB fill:#ff9,stroke:#333,stroke-width:2px
+    style App fill:#e1f5fe
+    style DB fill:#fff3e0
+    style Redis fill:#fce4ec
 ```
 
-## 3. MVC 详细逻辑流程 (MVC Logic Flow)
+---
 
-以下时序图展示了请求处理的核心流程，详细描绘了 **Controller (控制层)** 如何作为调度中心，协调验证逻辑、业务逻辑和数据访问。
-
-### 示例场景：用户登录 (`POST /users/login`)
+## 4. 请求处理流程
 
 ```mermaid
-sequenceDiagram
-    participant Client as 客户端
-    participant Middleware as 全局中间件
-    participant Router as 用户路由 (UserRouter)
-    participant Controller as 用户控制器 (UserController)
-    participant Validator as 验证器 (UserValidator)
-    participant DAO as 数据访问对象 (UserDao)
-    participant DB as 数据库
+flowchart TD
+    A[客户端发起请求] --> B[Nginx 负载均衡]
+    B --> C[Koa 应用接收]
 
-    Client->>Middleware: 请求 POST /users/login
-    Middleware->>Middleware: 记录日志, 错误处理, 跨域处理
-    Middleware->>Router: 转发请求
-    Router->>Controller: 调用 Login(ctx) 方法
-
-    rect rgb(240, 248, 255)
-        note right of Controller: 1. 输入验证 (Input Validation)
-        Controller->>Validator: validateParams(schema, body)
-        Validator-->>Controller: 返回校验结果
-
-        alt 校验失败
-            Controller-->>Client: 200 OK (业务码: PARAM_ERROR)
-        end
+    subgraph middleware["中间件层"]
+        C --> D[请求日志记录]
+        D --> E[错误处理中间件]
+        E --> F[CORS 跨域处理]
+        F --> G[请求体解析]
     end
 
-    rect rgb(255, 250, 240)
-        note right of Controller: 2. 数据访问 (Data Access)
-        Controller->>DAO: Login(userName, password)
-        DAO->>DB: 执行 SQL 查询
-        DB-->>DAO: 返回用户记录
-        DAO-->>Controller: 返回用户数据
+    G --> H[路由匹配]
+    H --> I{路由是否匹配?}
+
+    I -->|否| J[返回 404 Not Found]
+    I -->|是| K[Zod Schema 验证]
+
+    K --> L{验证通过?}
+    L -->|否| M[返回 400 Bad Request]
+    L -->|是| N[调用控制器]
+
+    subgraph controller["控制器层"]
+        N --> O[提取请求参数]
+        O --> P[调用 DAO 层]
     end
 
-    rect rgb(240, 255, 240)
-        note right of Controller: 3. 业务逻辑 (Business Logic)
-        alt 用户不存在或密码错误
-            Controller-->>Client: 200 OK (业务码: USER_LOGIN_FAIL)
-        else 登录成功
-            Controller->>Controller: 生成 Session/Token
-            Controller-->>Client: 200 OK (业务码: SUCCESS)
-        end
+    subgraph dao["数据访问层"]
+        P --> Q[Knex 构建查询]
+        Q --> R[(MySQL 数据库)]
+        R --> S[返回查询结果]
     end
 
-    Middleware-->>Client: 最终响应 (经过统一格式化)
+    S --> T{业务逻辑判断}
+    T -->|成功| U[返回成功响应]
+    T -->|失败| V[返回业务错误码]
+
+    U --> W[响应压缩]
+    V --> W
+    M --> W
+    J --> W
+    W --> X[客户端接收响应]
+
+    style A fill:#e3f2fd
+    style X fill:#e8f5e9
+    style R fill:#fff3e0
+    style M fill:#ffebee
+    style V fill:#fff8e1
+    style U fill:#e8f5e9
 ```
 
-## 4. 各层职责详解 (Layer Responsibilities)
+---
 
-### 4.1 全局中间件 (`src/middleware`)
-- **Logger**: 记录所有 HTTP 请求和响应时间。
-- **Error Handler**: 全局 try-catch 捕获未处理的异常，防止服务崩溃。
-- **CORS**: 处理跨域资源共享配置。
-- **Response Formatter**: 统一 JSON 响应格式 (如 `{ code, msg, data }`)。
+## 5. 技术栈使用指南
 
-### 4.2 路由层 (`src/routers`)
-- **职责**: 将 HTTP 路由 (URL + Method) 映射到具体的 Controller 函数。
-- **文件示例**: `src/routers/router/usersRouter.js`
-- **特点**: 纯粹的路由分发，不包含业务逻辑。
+### 5.1 Knex 数据库查询
 
-### 4.3 控制层 (`src/controllers`)
-- **职责**: 应用的大脑，核心调度者。
-- **逻辑流程**:
-  1. 从 `ctx.request.body` 提取数据。
-  2. 调用 **Validator** 校验数据完整性。
-  3. 调用 **DAO** 进行数据查询或持久化。
-  4. 根据结果决定 **业务状态码 (Business Code)** (如 `SUCCESS`, `USER_NOT_FOUND`)。
-  5. 设置 `ctx.body` 返回结果。
+**配置文件**: `src/config/knex.js`
 
-### 4.4 验证层 (`src/validators`)
-- **职责**: 定义数据模型 (Schema) 和验证规则。
-- **工具**: Joi。
-- **优势**: 将冗长的验证逻辑从 Controller 中剥离，保持代码整洁。
+```javascript
+import { db } from '../config/knex.js'
 
-### 4.5 数据访问层 (`src/models/dao`)
-- **职责**: 直接与数据库交互。
-- **逻辑**: 编写和执行 SQL 语句。
-- **抽象**: 隔离 Controller 与 SQL 细节，方便未来更换数据库或 ORM。
+// 查询单条
+const user = await db('users').where({ id: 1 }).first()
 
-### 4.6 配置层 (`src/config`)
-- **httpError.js**: 定义标准的 HTTP 状态码。
-- **businessCode.js**: 定义业务逻辑状态码 (如 10001 代表用户错误，0 代表成功)。
+// 查询多条
+const users = await db('users').where('age', '>', 18).select('id', 'name')
+
+// 插入
+const [id] = await db('users').insert({ name: 'John', age: 25 })
+
+// 更新
+await db('users').where({ id: 1 }).update({ name: 'Jane' })
+
+// 删除
+await db('users').where({ id: 1 }).del()
+
+// 事务
+await db.transaction(async (trx) => {
+  await trx('users').insert({ name: 'John' })
+  await trx('orders').insert({ user_id: 1 })
+})
+```
+
+---
+
+### 5.2 Zod 参数验证
+
+**Schema 定义**: `src/schemas/models/userEntitySchema.js`
+
+```javascript
+import { z } from 'zod'
+
+// 定义 Schema
+export const LoginBodySchema = z.object({
+  username: z.string().min(1, '用户名不能为空'),
+  password: z.string().min(6, '密码至少6位')
+})
+
+// 可选字段
+export const UpdateUserSchema = z.object({
+  name: z.string().optional(),
+  age: z.number().int().positive().optional()
+})
+
+// 自定义验证
+export const PasswordSchema = z.string()
+  .regex(/^[a-zA-Z]\w{5,17}$/, '密码格式不正确')
+```
+
+**路由中使用**:
+
+```javascript
+import { validateBody, validateQuery } from '../../middleware/validationMiddleware.js'
+
+// POST 请求验证 body
+router.post('/login', validateBody(LoginBodySchema), controller.login)
+
+// GET 请求验证 query
+router.get('/users', validateQuery(QuerySchema), controller.list)
+```
+
+---
+
+### 5.3 密码加密
+
+**工具文件**: `src/utils/password.js`
+
+```javascript
+import { hashPassword, comparePassword } from '../utils/password.js'
+
+// 注册时加密
+const hashedPassword = await hashPassword('plaintext123')
+// 结果: $2a$10$...
+
+// 登录时验证
+const isMatch = await comparePassword('plaintext123', hashedPassword)
+// 结果: true 或 false
+```
+
+---
+
+### 5.4 JWT 认证
+
+**工具文件**: `src/utils/jwt.js`
+
+```javascript
+import { generateToken, verifyToken } from '../utils/jwt.js'
+
+// 生成 Token
+const token = generateToken({ userId: 1, role: 'user' })
+
+// 验证 Token
+const decoded = verifyToken(token)
+// 结果: { userId: 1, role: 'user', iat: ..., exp: ... }
+```
+
+**认证中间件**:
+
+```javascript
+import authMiddleware from '../../middleware/authenticate.js'
+
+// 需要认证的路由
+router.get('/profile', authMiddleware, controller.getProfile)
+```
+
+---
+
+### 5.5 响应格式化
+
+**工具文件**: `src/utils/createResponse.js`
+
+```javascript
+import {
+  createSuccessResponse,
+  createFailResponse,
+  createErrorResponse,
+  createPaginatedResponse
+} from '../utils/createResponse.js'
+
+// 成功响应
+ctx.body = createSuccessResponse('操作成功', 200, { user })
+// { success: true, message: '操作成功', status: 200, data: { user } }
+
+// 失败响应
+ctx.body = createFailResponse('用户不存在', 404)
+// { success: false, message: '用户不存在', status: 404 }
+
+// 分页响应
+ctx.body = createPaginatedResponse(list, total, page, pageSize)
+// { success: true, data: { list, pagination: { total, page, pageSize, totalPages } } }
+```
+
+---
+
+### 5.6 日志系统
+
+**配置文件**: `src/config/logger.js`
+
+```javascript
+import logger from '../config/logger.js'
+
+// 不同级别
+logger.info('用户登录成功')
+logger.warn('请求频率过高')
+logger.error({ err: error, userId: 1 }, '数据库查询失败')
+
+// 在中间件中使用 ctx.log
+ctx.log.info('处理请求中...')
+```
+
+---
+
+### 5.7 后台任务 (Bull Queue)
+
+**队列定义**: `src/jobs/queue.js`
+
+```javascript
+import { cronQueue } from './jobs/queue.js'
+
+// 添加任务
+await cronQueue.add('taskName', { data: 'value' }, {
+  delay: 5000,           // 延迟 5 秒
+  attempts: 3,           // 重试 3 次
+  removeOnComplete: true // 完成后删除
+})
+
+// 定时任务
+await cronQueue.add('dailyReport', {}, {
+  repeat: { cron: '0 9 * * *' }  // 每天 9 点
+})
+```
+
+**任务处理器**: `src/jobs/processors/exampleTask.js`
+
+```javascript
+export default async function (job) {
+  console.log('处理任务:', job.data)
+  // 业务逻辑
+  return { success: true }
+}
+```
+
+---
+
+## 6. 业务状态码
+
+**文件**: `src/config/businessCode.js`
+
+| 状态码 | 常量 | 说明 |
+|--------|------|------|
+| 0 | SUCCESS | 操作成功 |
+| 1 | ERROR | 操作失败 |
+| 2 | PARAM_ERROR | 参数错误 |
+| 10001 | USER_PARAM_MISSING | 用户名或密码为空 |
+| 10004 | USER_NOT_FOUND | 用户不存在 |
+| 10005 | USER_EXIST | 用户已存在 |
+| 10006 | USER_LOGIN_FAIL | 登录失败 |
+
+---
+
+## 7. 环境配置
+
+**配置文件**: `.env.development` / `.env.production`
+
+```bash
+# 服务器
+PORT=8080
+DOCS_PORT=4000
+
+# 数据库
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=your_database
+
+# Redis
+REDIS_HOST=127.0.0.1
+REDIS_PORT=6379
+REDIS_PASSWORD=
+REDIS_DB=0
+
+# JWT
+JWT_SECRET=your_jwt_secret
+JWT_EXPIRES_IN=7d
+```
+
+---
+
+## 8. 开发命令
+
+```bash
+# 开发模式
+npm run dev
+
+# 后台 Worker
+npm run worker:dev
+
+# 代码检查
+npm run lint
+npm run lint:fix
+
+# 构建
+npm run build
+
+# 部署
+npm run deploy:test
+npm run deploy:prod
+
+# 生成 API 文档
+npm run docs
+```
+
+---
+
+## 9. 添加新功能指南
+
+### 添加新的 API 端点
+
+1. **创建 Schema** - `src/schemas/models/xxxSchema.js`
+2. **创建 DAO** - `src/models/dao/xxxDao.js`
+3. **创建 Controller** - `src/controllers/xxx/xxxController.js`
+4. **创建 Router** - `src/routers/router/xxxRouter.js`
+5. **注册路由** - 在 `src/routers/index.js` 中引入
+
+### 示例：添加文章模块
+
+```javascript
+// 1. Schema: src/schemas/models/articleSchema.js
+export const CreateArticleSchema = z.object({
+  title: z.string().min(1).max(100),
+  content: z.string().min(1)
+})
+
+// 2. DAO: src/models/dao/articleDao.js
+const create = async (data) => {
+  const [id] = await db('articles').insert(data)
+  return { id }
+}
+
+// 3. Controller: src/controllers/article/articleController.js
+const create = async (ctx) => {
+  const data = ctx.request.body
+  const result = await articleDao.create(data)
+  ctx.body = createSuccessResponse('创建成功', 201, result)
+}
+
+// 4. Router: src/routers/router/articleRouter.js
+router.post('/', validateBody(CreateArticleSchema), errorControllerWrapper(controller.create))
+```

@@ -4,10 +4,8 @@
  */
 
 import userDao from '../../models/dao/usersDao.js'
-import { validateParams } from '../../utils/validateParams.js'
 import { HTTP_CODE } from '../../config/httpError.js'
 import { BUSINESS_CODE, BUSINESS_MSG } from '../../config/businessCode.js'
-import { userSchema, userNameSchema } from '../../validators/usersValidator.js'
 
 /**
  * @summary 用户登录
@@ -18,18 +16,11 @@ import { userSchema, userNameSchema } from '../../validators/usersValidator.js'
  * @returns {User} 200 - 登录成功返回用户信息
  */
 const login = async (ctx) => {
-  const { userName, password } = ctx.request.body
-
-  // 校验用户信息是否符合规则
-  const error = validateParams(userSchema, { userName, password })
-  if (error) {
-    ctx.status = HTTP_CODE.OK
-    ctx.body = error
-    return
-  }
+  // 参数已由路由层 Zod 中间件校验，可直接使用
+  const { username, password } = ctx.request.body
 
   // 连接数据库根据用户名和密码查询用户信息
-  const user = await userDao.login(userName, password)
+  const user = await userDao.login(username, password)
   // 结果集长度为0则代表没有该用户
   if (user.length === 0) {
     ctx.status = HTTP_CODE.OK
@@ -78,18 +69,11 @@ const login = async (ctx) => {
  * @returns {Object} 200 - 查询结果
  */
 const findUserName = async (ctx) => {
-  const { userName } = ctx.request.body
-
-  // 校验用户名是否符合规则
-  const error = validateParams(userNameSchema, { userName })
-  if (error) {
-    ctx.status = HTTP_CODE.OK
-    ctx.body = error
-    return
-  }
+  // 参数已由路由层 Zod 中间件校验
+  const { username } = ctx.request.body
 
   // 连接数据库根据用户名查询用户信息
-  const user = await userDao.findUserName(userName)
+  const user = await userDao.findUserName(username)
   // 结果集长度为0则代表不存在该用户,可以注册
   if (user.length === 0) {
     ctx.status = HTTP_CODE.OK
@@ -131,19 +115,12 @@ const findUserName = async (ctx) => {
  * @returns {Object} 200 - 注册结果
  */
 const register = async (ctx) => {
-  const { userName, password } = ctx.request.body
-
-  // 校验用户信息是否符合规则
-  const error = validateParams(userSchema, { userName, password })
-  if (error) {
-    ctx.status = HTTP_CODE.OK
-    ctx.body = error
-    return
-  }
+  // 参数已由路由层 Zod 中间件校验
+  const { username, password } = ctx.request.body
 
   // 连接数据库根据用户名查询用户信息
   // 先判断该用户是否存在
-  const user = await userDao.findUserName(userName)
+  const user = await userDao.findUserName(username)
 
   if (user.length !== 0) {
     ctx.status = HTTP_CODE.OK
@@ -155,7 +132,7 @@ const register = async (ctx) => {
   }
 
   // 连接数据库插入用户信息
-  const registerResult = await userDao.register(userName, password)
+  const registerResult = await userDao.register(username, password)
   // 操作所影响的记录行数为1,则代表注册成功
   if (registerResult.affectedRows === 1) {
     ctx.status = HTTP_CODE.OK
