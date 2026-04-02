@@ -1,4 +1,5 @@
-import { db } from '../../config/knex.js'
+import { query } from '../../utils/db.js'
+
 import { hashPassword, comparePassword } from '../../utils/password.js'
 
 /**
@@ -8,18 +9,8 @@ import { hashPassword, comparePassword } from '../../utils/password.js'
  * @returns {Promise<Array>} - 匹配的用户数组
  */
 const login = async (username, password) => {
-  // 支持两种字段名以兼容旧数据
-  const user = await db('users')
-    .where((builder) => {
-      builder.where({ username }).orWhere({ userName: username })
-    })
-    .first()
-
-  if (!user) {
-    return []
-  }
-  const isMatch = await comparePassword(password, user.password)
-  return isMatch ? [user] : []
+  const sql = 'select * from users where userName = ? and password = ?'
+  return await query(sql, [username, password])
 }
 
 /**
@@ -28,11 +19,8 @@ const login = async (username, password) => {
  * @returns {Promise<Array>} - 用户数组
  */
 const findUserName = async (username) => {
-  // 支持两种字段名以兼容旧数据
-  const users = await db('users').where((builder) => {
-    builder.where({ username }).orWhere({ userName: username })
-  })
-  return users
+  const sql = 'select * from users where userName = ?'
+  return await query(sql, [username])
 }
 
 /**
@@ -42,9 +30,8 @@ const findUserName = async (username) => {
  * @returns {Promise<Object>} - 包含 affectedRows 的结果对象
  */
 const register = async (username, password) => {
-  const hashedPassword = await hashPassword(password)
-  const [id] = await db('users').insert({ username, password: hashedPassword })
-  return { affectedRows: id ? 1 : 0 }
+  const sql = 'select * from users where userName = ?'
+  return await query(sql, [username])
 }
 
 export default {

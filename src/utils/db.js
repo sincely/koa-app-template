@@ -1,5 +1,6 @@
 import mysql from 'mysql2/promise'
 import { dbConfig } from '../config/setting.js'
+import { db } from '@/config/knex.js'
 
 // 创建数据库连接
 const pool = mysql.createPool(dbConfig)
@@ -11,27 +12,34 @@ const pool = mysql.createPool(dbConfig)
  * @returns {Promise} - 返回查询结果
  */
 // 封装查询函数
-async function query(sql, params) {
-  const connection = await pool.getConnection()
-  try {
-    const [rows, fields] = await connection.execute(sql, params)
-    return rows
-  } finally {
-    connection.release()
-  }
+const query = (sql, params = []) => {
+  return new Promise((resolve, reject) => {
+    pool.getConnection((err, connection) => {
+      if (err) {
+        reject(err)
+        return
+      }
+      connection.query(sql, params, (error, results) => {
+        connection.release() // 释放连接
+        if (error) {
+          reject(error)
+        } else {
+          resolve(results)
+        }
+      })
+    })
+  })
 }
 
 /**
  * 获取数据库连接（用于事务操作）
  * @returns {Promise} - 返回一个数据库连接
  */
-async function getConnection() {
-  const connection = await pool.getConnection()
-  // console.log(`✅ 数据库连接成功（环境：${env}，数据库：${dbConfig.database}`)
-  return connection
+const getConnection = () => {
+  console.log(`✅ 数据库连接成功（环境：${env}，数据库：${dbConfig.database}`)
+  return pool.getConnection()
 }
 
-export default {
-  query,
-  getConnection
-}
+export { query, getConnection }
+
+export default { query, getConnection }
