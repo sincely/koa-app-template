@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.0.4](https://github.com/sincely/koa-app-template/compare/v1.0.3...v1.0.4) (2026-04-02)
+
+### ✨ Features
+
+* 引入 Zod、Joi 和 Knex 文档，添加 Knex 调试日志，并新增密码迁移脚本 ([b681f5c](https://github.com/sincely/koa-app-template/commit/b681f5c79bc1a8ef03135453bbd3bdf014d77e7b))
+* 添加基于 Bull 的后台任务队列和定时任务系统 ([28293d0](https://github.com/sincely/koa-app-template/commit/28293d0f1fa9652ee5ff2a6aea0c53e54e94da82))
+* 移除 Knex 依赖，重构数据库操作为直接使用 MySQL 连接池，并新增多个数据访问模块 ([4abb9ff](https://github.com/sincely/koa-app-template/commit/4abb9ff4b75d040aa5f9d64818e2fd03b5caca23))
+
+### 🔧 Chores
+
+* 移除数据持久层文件中的注释信息 ([9dfb4f2](https://github.com/sincely/koa-app-template/commit/9dfb4f2f8410699c5b91283c34c5003887b8681b))
+
+### ♻️ Code Refactoring
+
+* 重构认证机制为纯 JWT Token，移除 session 依赖 ([9779b97](https://github.com/sincely/koa-app-template/commit/9779b97daf41739b5625462f30c262e7774fa35a))
+
 ## [1.0.3](https://github.com/sincely/koa-app-template/compare/v1.0.2...v1.0.3) (2026-02-01)
 
 ### ✨ Features
