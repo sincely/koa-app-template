@@ -1,11 +1,3 @@
-/*
- * @Description: 购物车模块数据持久层
- * @Author: hai-27
- * @Date: 2020-02-19 16:17:19
- * @LastEditors: hai-27
- * @LastEditTime: 2020-02-27 15:58:55
- */
-
 import { query } from '../../utils/db.js'
 
 // 获取购物车信息

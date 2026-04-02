@@ -1,7 +1,4 @@
 import { query } from '../../utils/db.js'
-
-import { hashPassword, comparePassword } from '../../utils/password.js'
-
 /**
  * 用户登录 - 根据用户名查找用户并验证密码
  * @param {string} username - 用户名

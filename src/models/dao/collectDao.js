@@ -1,10 +1,3 @@
-/*
- * @Description: 我的收藏模块数据持久层
- * @Author: hai-27
- * @Date: 2020-03-04 22:33:56
- * @LastEditors: hai-27
- * @LastEditTime: 2020-03-10 17:50:37
- */
 import { query } from '../../utils/db.js'
 
 // 连接数据库,把收藏商品信息插入数据库

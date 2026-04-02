@@ -1,10 +1,3 @@
-/*
- * @Description: 商品模块数据持久层
- * @Author: hai-27
- * @Date: 2020-02-07 16:51:56
- * @LastEditors: hai-27
- * @LastEditTime: 2020-02-27 15:42:52
- */
 import { query } from '../../utils/db.js'
 
 // 连接数据库获取商品分类
