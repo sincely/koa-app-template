@@ -6,7 +6,6 @@ import dotenv from 'dotenv'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-// 在读取任何 process.env 之前加载环境变量文件
 const nodeEnv = process.env.NODE_ENV || 'development'
 const envFilePath = path.resolve(process.cwd(), `.env.${nodeEnv}`)
 const fallbackEnvPath = path.resolve(process.cwd(), '.env')
@@ -19,25 +18,22 @@ if (fs.existsSync(envFilePath)) {
   dotenv.config()
 }
 
-// 应用配置
 const portFromEnv = Number.parseInt(String(process.env.PORT ?? ''), 10)
-export const Port = Number.isFinite(portFromEnv) ? portFromEnv : 8080 // 启动端口
-export const staticDir = path.resolve(__dirname, '../../public') // 静态资源路径
-export const uploadDir = path.join(__dirname, '../../public/') // 上传文件路径
+export const Port = Number.isFinite(portFromEnv) ? portFromEnv : 8080
+export const staticDir = path.resolve(__dirname, '../../public')
+export const uploadDir = path.join(__dirname, '../../public/')
 
-// 数据库连接设置
 export const dbConfig = {
-  connectionLimit: 10, // 最大连接数，默认为10
-  host: process.env.DB_HOST, // 数据库服务器地址
-  port: 3306, // 数据库端口
-  waitForConnections: true, // 是否等待连接
-  user: process.env.DB_USER, // 数据库的用户名
-  password: process.env.DB_PASSWORD, // 数据库密码
-  queueLimit: 0, // 最大等待连接数（0 表示不限制）
-  database: process.env.DB_NAME // 数据库名称
+  connectionLimit: 10,
+  host: process.env.DB_HOST,
+  port: 3306,
+  waitForConnections: true,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  queueLimit: 0,
+  database: process.env.DB_NAME
 }
 
-// Redis 配置
 export const redisConfig = {
   host: process.env.REDIS_HOST || '127.0.0.1',
   port: Number.parseInt(process.env.REDIS_PORT || '6379', 10),
@@ -45,16 +41,13 @@ export const redisConfig = {
   db: Number.parseInt(process.env.REDIS_DB || '0', 10)
 }
 
-// JWT 配置
 export const TokenSecret = process.env.JWT_SECRET
-export const TokenExpire = process.env.JWT_EXPIRES_IN || '7d' // 默认7天
+export const TokenExpire = process.env.JWT_EXPIRES_IN || '7d'
 
-// 文档服务配置
 const docsPortFromEnv = Number.parseInt(String(process.env.DOCS_PORT ?? ''), 10)
-export const DocsPort = Number.isFinite(docsPortFromEnv) ? docsPortFromEnv : 4000 // 文档服务端口
-export const docsDir = path.resolve(__dirname, '../../docs') // 文档目录
+export const DocsPort = Number.isFinite(docsPortFromEnv) ? docsPortFromEnv : 4000
+export const docsDir = path.resolve(__dirname, '../../docs')
 
-// 辅助函数：标准化路径前缀
 const normalizePrefix = (value) => {
   const raw = String(value ?? '').trim()
   if (!raw) {
@@ -64,5 +57,4 @@ const normalizePrefix = (value) => {
   return withLeadingSlash.endsWith('/') ? withLeadingSlash.slice(0, -1) : withLeadingSlash
 }
 
-// 文档服务路径前缀
 export const DocsPrefix = normalizePrefix(process.env.DOCS_PREFIX) || '/docs'

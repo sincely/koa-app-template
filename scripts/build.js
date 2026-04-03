@@ -7,15 +7,16 @@ const __dirname = path.dirname(__filename)
 const rootDir = path.resolve(__dirname, '..')
 const distDir = path.join(rootDir, 'dist')
 const srcDir = path.join(rootDir, 'src')
+const deployFileNames = ['ecosystem.config.cjs', 'package.json', 'package-lock.json']
+const distInstallScriptSource = path.join(rootDir, 'scripts', 'install-start-dist.sh')
+const distInstallScriptTarget = path.join(distDir, 'install-start.sh')
 
-// Helper to remove directory
 function rmDir(dirPath) {
   if (fs.existsSync(dirPath)) {
     fs.rmSync(dirPath, { recursive: true, force: true })
   }
 }
 
-// Helper to copy directory
 function copyDir(src, dest) {
   fs.mkdirSync(dest, { recursive: true })
   const entries = fs.readdirSync(src, { withFileTypes: true })
@@ -32,7 +33,21 @@ function copyDir(src, dest) {
   }
 }
 
+function copyFileIfExists(fileName) {
+  const sourcePath = path.join(rootDir, fileName)
+  if (!fs.existsSync(sourcePath)) {
+    return
+  }
+  fs.copyFileSync(sourcePath, path.join(distDir, fileName))
+}
+
 console.log('Building...')
 rmDir(distDir)
 copyDir(srcDir, distDir)
+for (const fileName of deployFileNames) {
+  copyFileIfExists(fileName)
+}
+if (fs.existsSync(distInstallScriptSource)) {
+  fs.copyFileSync(distInstallScriptSource, distInstallScriptTarget)
+}
 console.log('Build complete.')
