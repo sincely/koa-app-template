@@ -198,7 +198,10 @@ function convertToOpenApiType(jsDocType, paramName = '') {
   const typeMap = {
     string: { type: 'string', example: getExampleValue('string', paramName) },
     number: { type: 'number', example: getExampleValue('number', paramName) },
-    integer: { type: 'integer', example: getExampleValue('integer', paramName) },
+    integer: {
+      type: 'integer',
+      example: getExampleValue('integer', paramName)
+    },
     boolean: { type: 'boolean', example: true },
     object: { type: 'object', example: {} },
     array: { type: 'array', items: { type: 'string' }, example: [] }

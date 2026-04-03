@@ -3,6 +3,7 @@ import Koa from 'koa'
 import KoaStatic from 'koa-static'
 import KoaBody from 'koa-body'
 import cors from 'koa2-cors'
+import session from 'koa-session'
 
 // 配置文件
 import { Port, staticDir, DocsPort, docsDir } from './config/setting.js'
@@ -21,6 +22,7 @@ import Routers from './routers/index.js'
 
 const app = new Koa()
 const docsApp = new Koa() // 文档服务实例
+app.keys = [process.env.SESSION_SECRET || process.env.JWT_SECRET || 'koa-app-template-session-secret']
 
 // HTTP请求日志中间件
 app.use(loggerMiddleware)
@@ -30,6 +32,19 @@ app.use(error)
 
 // 跨域处理
 app.use(cors(corsConfig))
+
+app.use(
+  session(
+    {
+      key: 'koa.sess',
+      maxAge: 86400000,
+      httpOnly: true,
+      signed: true,
+      renew: true
+    },
+    app
+  )
+)
 
 // 为静态资源请求重写url
 app.use(rewriteUrl)
@@ -41,7 +56,7 @@ app.use(compress)
 app.use(KoaStatic(staticDir))
 
 app.use(async (ctx, next) => {
-  ctx.state.user = ctx.session.user
+  ctx.state.user = ctx.session?.user
   await next()
 })
 
