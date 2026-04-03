@@ -37,9 +37,7 @@
   "paths": {
     "/user/login": {
       "post": {
-        "tags": [
-          "用户模块"
-        ],
+        "tags": ["用户模块"],
         "summary": "用户登录",
         "description": "验证用户名和密码，登录成功后将用户信息保存到 session",
         "operationId": "post__user_login",
@@ -75,10 +73,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "userName",
-                  "password"
-                ],
+                "required": ["userName", "password"],
                 "properties": {
                   "userName": {
                     "type": "string",
@@ -103,9 +98,7 @@
     },
     "/user/findUserName": {
       "post": {
-        "tags": [
-          "用户模块"
-        ],
+        "tags": ["用户模块"],
         "summary": "查询用户名是否存在",
         "description": "查询数据库中是否已存在指定用户名，用于注册前的前端校验",
         "operationId": "post__user_findUserName",
@@ -141,9 +134,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "userName"
-                ],
+                "required": ["userName"],
                 "properties": {
                   "userName": {
                     "type": "string",
@@ -162,9 +153,7 @@
     },
     "/user/register": {
       "post": {
-        "tags": [
-          "用户模块"
-        ],
+        "tags": ["用户模块"],
         "summary": "用户注册",
         "description": "注册新用户，会先检查用户名是否已存在，不存在则创建新用户",
         "operationId": "post__user_register",
@@ -200,10 +189,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "userName",
-                  "password"
-                ],
+                "required": ["userName", "password"],
                 "properties": {
                   "userName": {
                     "type": "string",

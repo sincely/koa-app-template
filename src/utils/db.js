@@ -1,6 +1,5 @@
 import mysql from 'mysql2/promise'
 import { dbConfig } from '../config/setting.js'
-import { db } from '@/config/knex.js'
 
 // 创建数据库连接
 const pool = mysql.createPool(dbConfig)

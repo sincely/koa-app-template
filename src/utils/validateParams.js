@@ -1,4 +1,3 @@
-import Joi from 'joi'
 import { BUSINESS_CODE } from '../config/businessCode.js'
 
 /**
@@ -19,5 +18,3 @@ export const validateParams = (schema, data) => {
   }
   return null
 }
-
-export { Joi }
