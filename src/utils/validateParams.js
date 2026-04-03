@@ -1,4 +1,4 @@
-import { BUSINESS_CODE } from '../config/businessCode.js'
+import { businessCode } from '../config/businessCode.js'
 
 /**
  * 参数校验工具函数
@@ -12,7 +12,7 @@ export const validateParams = (schema, data) => {
     // 默认错误码为 PARAM_ERROR (参数错误)，也可以根据 error.details[0].type 细分
     // 这里为了简单，统一返回错误信息
     return {
-      code: BUSINESS_CODE.PARAM_ERROR,
+      code: businessCode.paramError,
       msg: error.details[0].message
     }
   }

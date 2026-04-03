@@ -1,41 +1,41 @@
-const HTTP_CODE = {
-  OK: 200, // 成功
-  CREATED: 201, // 创建成功
-  ACCEPTED: 202, // 已接受
-  NO_CONTENT: 204, // 无内容
-  BAD_REQUEST: 400, // 请求参数错误
-  UNAUTHORIZED: 401, // 未授权
-  FORBIDDEN: 403, // 禁止访问
-  NOT_FOUND: 404, // 资源不存在
-  METHOD_NOT_ALLOWED: 405, // 方法不允许
-  REQUEST_TIMEOUT: 408, // 请求超时
-  CONFLICT: 409, // 资源冲突
-  UNPROCESSABLE_ENTITY: 422, // 无法处理的实体
-  INTERNAL_SERVER_ERROR: 500, // 服务器内部错误
-  NOT_IMPLEMENTED: 501, // 未实现
-  BAD_GATEWAY: 502, // 网关错误
-  SERVICE_UNAVAILABLE: 503, // 服务不可用
-  GATEWAY_TIMEOUT: 504 // 网关超时
+const httpCode = {
+  ok: 200, // 成功
+  created: 201, // 创建成功
+  accepted: 202, // 已接受
+  noContent: 204, // 无内容
+  badRequest: 400, // 请求参数错误
+  unauthorized: 401, // 未授权
+  forbidden: 403, // 禁止访问
+  notFound: 404, // 资源不存在
+  methodNotAllowed: 405, // 方法不允许
+  requestTimeout: 408, // 请求超时
+  conflict: 409, // 资源冲突
+  unprocessableEntity: 422, // 无法处理的实体
+  internalServerError: 500, // 服务器内部错误
+  notImplemented: 501, // 未实现
+  badGateway: 502, // 网关错误
+  serviceUnavailable: 503, // 服务不可用
+  gatewayTimeout: 504 // 网关超时
 }
 
-const HTTP_MESSAGE = {
-  [HTTP_CODE.OK]: 'Success',
-  [HTTP_CODE.CREATED]: 'Created',
-  [HTTP_CODE.ACCEPTED]: 'Accepted',
-  [HTTP_CODE.NO_CONTENT]: 'No Content',
-  [HTTP_CODE.BAD_REQUEST]: 'Bad Request',
-  [HTTP_CODE.UNAUTHORIZED]: 'Unauthorized',
-  [HTTP_CODE.FORBIDDEN]: 'Forbidden',
-  [HTTP_CODE.NOT_FOUND]: 'Not Found',
-  [HTTP_CODE.METHOD_NOT_ALLOWED]: 'Method Not Allowed',
-  [HTTP_CODE.REQUEST_TIMEOUT]: 'Request Timeout',
-  [HTTP_CODE.CONFLICT]: 'Conflict',
-  [HTTP_CODE.UNPROCESSABLE_ENTITY]: 'Unprocessable Entity',
-  [HTTP_CODE.INTERNAL_SERVER_ERROR]: 'Internal Server Error',
-  [HTTP_CODE.NOT_IMPLEMENTED]: 'Not Implemented',
-  [HTTP_CODE.BAD_GATEWAY]: 'Bad Gateway',
-  [HTTP_CODE.SERVICE_UNAVAILABLE]: 'Service Unavailable',
-  [HTTP_CODE.GATEWAY_TIMEOUT]: 'Gateway Timeout'
+const httpMessage = {
+  [httpCode.ok]: 'Success',
+  [httpCode.created]: 'Created',
+  [httpCode.accepted]: 'Accepted',
+  [httpCode.noContent]: 'No Content',
+  [httpCode.badRequest]: 'Bad Request',
+  [httpCode.unauthorized]: 'Unauthorized',
+  [httpCode.forbidden]: 'Forbidden',
+  [httpCode.notFound]: 'Not Found',
+  [httpCode.methodNotAllowed]: 'Method Not Allowed',
+  [httpCode.requestTimeout]: 'Request Timeout',
+  [httpCode.conflict]: 'Conflict',
+  [httpCode.unprocessableEntity]: 'Unprocessable Entity',
+  [httpCode.internalServerError]: 'Internal Server Error',
+  [httpCode.notImplemented]: 'Not Implemented',
+  [httpCode.badGateway]: 'Bad Gateway',
+  [httpCode.serviceUnavailable]: 'Service Unavailable',
+  [httpCode.gatewayTimeout]: 'Gateway Timeout'
 }
 
-export { HTTP_CODE, HTTP_MESSAGE }
+export { httpCode, httpMessage }

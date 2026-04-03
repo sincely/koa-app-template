@@ -4,8 +4,8 @@
  */
 
 import userDao from '../../models/dao/usersDao.js'
-import { HTTP_CODE } from '../../config/httpError.js'
-import { BUSINESS_CODE, BUSINESS_MSG } from '../../config/businessCode.js'
+import { httpCode } from '../../config/httpError.js'
+import { businessCode, businessMsg } from '../../config/businessCode.js'
 
 /**
  * @summary 用户登录
@@ -23,10 +23,10 @@ const login = async (ctx) => {
   const user = await userDao.login(username, password)
   // 结果集长度为0则代表没有该用户
   if (user.length === 0) {
-    ctx.status = HTTP_CODE.OK
+    ctx.status = httpCode.ok
     ctx.body = {
-      code: BUSINESS_CODE.USER_LOGIN_FAIL,
-      msg: BUSINESS_MSG[BUSINESS_CODE.USER_LOGIN_FAIL]
+      code: businessCode.userLoginFail,
+      msg: businessMsg[businessCode.userLoginFail]
     }
     return
   }
@@ -41,9 +41,9 @@ const login = async (ctx) => {
     // 保存用户信息到session
     ctx.session.user = loginUser
 
-    ctx.status = HTTP_CODE.OK
+    ctx.status = httpCode.ok
     ctx.body = {
-      code: BUSINESS_CODE.SUCCESS,
+      code: businessCode.success,
       user: loginUser,
       msg: '登录成功'
     }
@@ -54,9 +54,9 @@ const login = async (ctx) => {
   // 若存在user.length != 1 || user.length!=0
   // 返回未知错误
   // 正常不会出现
-  ctx.status = HTTP_CODE.INTERNAL_SERVER_ERROR
+  ctx.status = httpCode.internalServerError
   ctx.body = {
-    code: BUSINESS_CODE.ERROR,
+    code: businessCode.error,
     msg: '未知错误'
   }
 }
@@ -76,9 +76,9 @@ const findUserName = async (ctx) => {
   const user = await userDao.findUserName(username)
   // 结果集长度为0则代表不存在该用户,可以注册
   if (user.length === 0) {
-    ctx.status = HTTP_CODE.OK
+    ctx.status = httpCode.ok
     ctx.body = {
-      code: BUSINESS_CODE.SUCCESS,
+      code: businessCode.success,
       msg: '用户名不存在，可以注册'
     }
     return
@@ -87,10 +87,10 @@ const findUserName = async (ctx) => {
   // 数据库设置用户名唯一
   // 结果集长度为1则代表存在该用户,不可以注册
   if (user.length === 1) {
-    ctx.status = HTTP_CODE.OK
+    ctx.status = httpCode.ok
     ctx.body = {
-      code: BUSINESS_CODE.USER_EXIST,
-      msg: BUSINESS_MSG[BUSINESS_CODE.USER_EXIST]
+      code: businessCode.userExist,
+      msg: businessMsg[businessCode.userExist]
     }
     return
   }
@@ -99,9 +99,9 @@ const findUserName = async (ctx) => {
   // 若存在user.length != 1 || user.length!=0
   // 返回未知错误
   // 正常不会出现
-  ctx.status = HTTP_CODE.INTERNAL_SERVER_ERROR
+  ctx.status = httpCode.internalServerError
   ctx.body = {
-    code: BUSINESS_CODE.ERROR,
+    code: businessCode.error,
     msg: '未知错误'
   }
 }
@@ -123,10 +123,10 @@ const register = async (ctx) => {
   const user = await userDao.findUserName(username)
 
   if (user.length !== 0) {
-    ctx.status = HTTP_CODE.OK
+    ctx.status = httpCode.ok
     ctx.body = {
-      code: BUSINESS_CODE.USER_EXIST,
-      msg: BUSINESS_MSG[BUSINESS_CODE.USER_EXIST]
+      code: businessCode.userExist,
+      msg: businessMsg[businessCode.userExist]
     }
     return
   }
@@ -135,17 +135,17 @@ const register = async (ctx) => {
   const registerResult = await userDao.register(username, password)
   // 操作所影响的记录行数为1,则代表注册成功
   if (registerResult.affectedRows === 1) {
-    ctx.status = HTTP_CODE.OK
+    ctx.status = httpCode.ok
     ctx.body = {
-      code: BUSINESS_CODE.SUCCESS,
+      code: businessCode.success,
       msg: '注册成功'
     }
     return
   }
   // 否则失败
-  ctx.status = HTTP_CODE.INTERNAL_SERVER_ERROR
+  ctx.status = httpCode.internalServerError
   ctx.body = {
-    code: BUSINESS_CODE.ERROR,
+    code: businessCode.error,
     msg: '未知错误，注册失败'
   }
 }

@@ -1,5 +1,5 @@
 import { createErrorResponse } from '../utils/createResponse.js'
-import { HTTP_CODE } from '../config/httpError.js'
+import { httpCode } from '../config/httpError.js'
 
 const toZodErrorDetails = (error) => {
   const issues = Array.isArray(error?.issues) ? error.issues : []
@@ -22,7 +22,7 @@ const firstZodMessage = (error) => {
 export const validateBody = (schema) => async (ctx, next) => {
   const parsed = schema.safeParse(ctx.request.body)
   if (!parsed.success) {
-    ctx.status = HTTP_CODE.BAD_REQUEST
+    ctx.status = httpCode.badRequest
     ctx.body = createErrorResponse(ctx.status, firstZodMessage(parsed.error))
     return
   }
@@ -42,7 +42,7 @@ export const validateQuery = (schema) => async (ctx, next) => {
   const parsed = schema.safeParse(ctx.query)
 
   if (!parsed.success) {
-    ctx.status = HTTP_CODE.BAD_REQUEST
+    ctx.status = httpCode.badRequest
     ctx.body = createErrorResponse(ctx.status, firstZodMessage(parsed.error))
     return
   }
