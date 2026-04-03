@@ -7,9 +7,17 @@ const __dirname = path.dirname(__filename)
 const rootDir = path.resolve(__dirname, '..')
 const distDir = path.join(rootDir, 'dist')
 const srcDir = path.join(rootDir, 'src')
-const deployFileNames = ['ecosystem.config.cjs', 'package.json', 'package-lock.json']
+const deployFileNames = [
+  'ecosystem.config.cjs',
+  'package.json',
+  // 'package-lock.json',
+  '.env.development',
+  '.env.test',
+  '.env.production'
+]
 const distInstallScriptSource = path.join(rootDir, 'scripts', 'install-start-dist.sh')
 const distInstallScriptTarget = path.join(distDir, 'install-start.sh')
+const distEcosystemConfigPath = path.join(distDir, 'ecosystem.config.cjs')
 
 function rmDir(dirPath) {
   if (fs.existsSync(dirPath)) {
@@ -46,6 +54,13 @@ rmDir(distDir)
 copyDir(srcDir, distDir)
 for (const fileName of deployFileNames) {
   copyFileIfExists(fileName)
+}
+if (fs.existsSync(distEcosystemConfigPath)) {
+  const ecosystemContent = fs.readFileSync(distEcosystemConfigPath, 'utf8')
+  const distEcosystemContent = ecosystemContent
+    .replaceAll('./dist/app.js', './app.js')
+    .replaceAll('./src/worker.js', './worker.js')
+  fs.writeFileSync(distEcosystemConfigPath, distEcosystemContent)
 }
 if (fs.existsSync(distInstallScriptSource)) {
   fs.copyFileSync(distInstallScriptSource, distInstallScriptTarget)
