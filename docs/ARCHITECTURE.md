@@ -4,14 +4,14 @@
 
 | 类别 | 技术 | 版本 | 说明 |
 |------|------|------|------|
-| **核心框架** | Koa2 | 2.16.x | 轻量级 Node.js Web 框架 |
+| **核心框架** | Koa | 3.2.x | 轻量级 Node.js Web 框架 |
 | **运行时** | Node.js | 22.x | ES Modules 原生支持 |
 | **数据库** | MySQL | 8.x | 关系型数据库 |
 | **查询构建器** | Knex.js | 3.x | SQL 查询构建器 |
 | **参数校验** | Zod | 4.x | TypeScript-first 验证库 |
 | **日志系统** | Pino | 10.x | 高性能 JSON 日志 |
 | **密码加密** | bcryptjs | 2.x | 密码哈希 |
-| **认证** | JWT | 8.x | JSON Web Token |
+| **认证** | JWT | 9.x | JSON Web Token |
 | **进程管理** | PM2 | - | 生产环境进程管理 |
 | **任务队列** | Bull | 4.x | Redis 任务队列 |
 
@@ -100,46 +100,51 @@ flowchart TD
         C --> D[请求日志记录]
         D --> E[错误处理中间件]
         E --> F[CORS 跨域处理]
-        F --> G[请求体解析]
+        F --> G[Session]
+        G --> H[静态资源 URL 重写]
+        H --> I[响应压缩]
+        I --> J[静态资源服务]
+        J --> K[注入 ctx.state.user]
+        K --> L[请求体解析]
     end
 
-    G --> H[路由匹配]
-    H --> I{路由是否匹配?}
+    L --> M[路由匹配]
+    M --> N{路由是否匹配?}
 
-    I -->|否| J[返回 404 Not Found]
-    I -->|是| K[Zod Schema 验证]
+    N -->|否| O[返回 404 Not Found]
+    N -->|是| P[Zod Schema 验证]
 
-    K --> L{验证通过?}
-    L -->|否| M[返回 400 Bad Request]
-    L -->|是| N[调用控制器]
+    P --> Q{验证通过?}
+    Q -->|否| R[返回 400 Bad Request]
+    Q -->|是| S[调用控制器]
 
     subgraph controller["控制器层"]
-        N --> O[提取请求参数]
-        O --> P[调用 DAO 层]
+        S --> T[提取请求参数]
+        T --> U[调用 DAO 层]
     end
 
     subgraph dao["数据访问层"]
-        P --> Q[Knex 构建查询]
-        Q --> R[(MySQL 数据库)]
-        R --> S[返回查询结果]
+        U --> V[Knex 构建查询]
+        V --> W[(MySQL 数据库)]
+        W --> X[返回查询结果]
     end
 
-    S --> T{业务逻辑判断}
-    T -->|成功| U[返回成功响应]
-    T -->|失败| V[返回业务错误码]
+    X --> Y{业务逻辑判断}
+    Y -->|成功| Z[返回成功响应]
+    Y -->|失败| AA[返回业务错误码]
 
-    U --> W[响应压缩]
-    V --> W
-    M --> W
-    J --> W
-    W --> X[客户端接收响应]
+    Z --> AB[输出响应]
+    AA --> AB
+    R --> AB
+    O --> AB
+    AB --> AC[客户端接收响应]
 
     style A fill:#e3f2fd
-    style X fill:#e8f5e9
-    style R fill:#fff3e0
-    style M fill:#ffebee
-    style V fill:#fff8e1
-    style U fill:#e8f5e9
+    style AC fill:#e8f5e9
+    style W fill:#fff3e0
+    style R fill:#ffebee
+    style AA fill:#fff8e1
+    style Z fill:#e8f5e9
 ```
 
 ---
@@ -342,13 +347,30 @@ export default async function (job) {
 
 | 状态码 | 常量 | 说明 |
 |--------|------|------|
-| 0 | SUCCESS | 操作成功 |
-| 1 | ERROR | 操作失败 |
-| 2 | PARAM_ERROR | 参数错误 |
-| 10001 | USER_PARAM_MISSING | 用户名或密码为空 |
-| 10004 | USER_NOT_FOUND | 用户不存在 |
-| 10005 | USER_EXIST | 用户已存在 |
-| 10006 | USER_LOGIN_FAIL | 登录失败 |
+| 0 | businessCode.success | 操作成功 |
+| 1 | businessCode.error | 操作失败 |
+| 2 | businessCode.paramError | 参数错误 |
+| 10001 | businessCode.userParamMissing | 用户名或密码为空 |
+| 10004 | businessCode.userNotFound | 用户不存在 |
+| 10005 | businessCode.userExist | 用户已存在 |
+| 10006 | businessCode.userLoginFail | 登录失败 |
+
+**消息映射对象**: `businessMsg`（key 为状态码）
+
+### 6.1 HTTP 状态码
+
+**文件**: `src/config/httpError.js`
+
+| HTTP 状态码 | 常量 | 说明 |
+|--------|------|------|
+| 200 | httpCode.ok | 成功 |
+| 400 | httpCode.badRequest | 请求参数错误 |
+| 401 | httpCode.unauthorized | 未授权 |
+| 403 | httpCode.forbidden | 禁止访问 |
+| 404 | httpCode.notFound | 资源不存在 |
+| 500 | httpCode.internalServerError | 服务器内部错误 |
+
+**消息映射对象**: `httpMessage`（key 为状态码）
 
 ---
 
@@ -385,6 +407,7 @@ JWT_EXPIRES_IN=7d
 ```bash
 # 开发模式
 npm run dev
+npm run dev:win
 
 # 后台 Worker
 npm run worker:dev
@@ -402,7 +425,10 @@ npm run deploy:prod
 
 # 生成 API 文档
 npm run docs
+npm run docs:serve
 ```
+
+PM2 使用细节可参考：`docs/PM2_GUIDE.md`
 
 ---
 
