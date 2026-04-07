@@ -28,13 +28,14 @@
     "lint:fix": "eslint . --fix",
     "prettier:fix": "prettier --write .",
     "lint-staged": "lint-staged",
-    "prepare": "husky install",
+    "prepare": "node -e \"if (process.env.NODE_ENV !== 'production') { require('child_process').execSync('husky install', { stdio: 'inherit' }) }\"",
     "docs:openapi": "node scripts/generateApiDoc.js",
     "docs:md": "node scripts/generateApiMd.js",
     "docs": "npm run docs:openapi && npm run docs:md",
     "docs:serve": "npm run docs && npx docsify-cli serve docs --port 4000"
   },
   "dependencies": {
+    "@koa/bodyparser": "6.1.0",
     "@koa/router": "15.4.0",
     "axios": "1.8.4",
     "bcrypt": "6.0.0",

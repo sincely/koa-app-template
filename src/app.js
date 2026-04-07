@@ -4,6 +4,7 @@ import KoaStatic from 'koa-static'
 import KoaBody from 'koa-body'
 import cors from 'koa2-cors'
 import session from 'koa-session'
+import KoaBodyParser from '@koa/bodyparser'
 
 // 配置文件
 import { Port, staticDir, DocsPort, docsDir } from './config/setting.js'
@@ -65,6 +66,9 @@ app.use(KoaBody(koaBodyConfig))
 
 // 使用路由中间件
 app.use(Routers.routes()).use(Routers.allowedMethods())
+
+// 处理请求体数据
+app.use(KoaBodyParser())
 
 // 配置文档服务 (docsify)
 docsApp.use(async (ctx, next) => {
