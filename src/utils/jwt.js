@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken'
 import { TokenSecret, TokenExpire } from '../config/jwt.js'
-console.log(TokenSecret, TokenExpire)
 /**
  * 生成 Token
  * @param {Object} payload - 要加密的数据

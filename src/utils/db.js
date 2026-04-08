@@ -11,31 +11,16 @@ const pool = mysql.createPool(dbConfig)
  * @returns {Promise} - 返回查询结果
  */
 // 封装查询函数
-const query = (sql, params = []) => {
-  return new Promise((resolve, reject) => {
-    pool.getConnection((err, connection) => {
-      if (err) {
-        reject(err)
-        return
-      }
-      connection.query(sql, params, (error, results) => {
-        connection.release() // 释放连接
-        if (error) {
-          reject(error)
-        } else {
-          resolve(results)
-        }
-      })
-    })
-  })
+const query = async (sql, params = []) => {
+  const [result] = await pool.execute(sql, params)
+  return result
 }
 
 /**
  * 获取数据库连接（用于事务操作）
  * @returns {Promise} - 返回一个数据库连接
  */
-const getConnection = () => {
-  console.log(`✅ 数据库连接成功（环境：${env}，数据库：${dbConfig.database}`)
+const getConnection = async () => {
   return pool.getConnection()
 }
 

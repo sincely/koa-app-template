@@ -23,12 +23,12 @@ export const errorControllerWrapper = (controller) => {
       if (isHttpError(err)) {
         const status = err.status ?? err.statusCode
         ctx.status = status
-        ctx.body = createFailResponse(ctx.status, err.message || 'Request failed')
+        ctx.body = createFailResponse(err.message || 'Request failed', ctx.status)
         return
       }
 
       ctx.status = 500
-      ctx.body = createErrorResponse(ctx.status, 'Something went wrong', {})
+      ctx.body = createErrorResponse('Something went wrong', ctx.status, {})
     }
   }
 }
