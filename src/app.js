@@ -6,7 +6,8 @@ import cors from 'koa2-cors'
 import session from 'koa-session'
 
 // 配置文件
-import { Port, staticDir, DocsPort, docsDir } from './config/setting.js'
+import { Port, staticDir } from './config/server.js'
+import { DocsPort, docsDir } from './config/docs.js'
 import logger from './config/logger.js'
 import corsConfig from './config/cors.js'
 import koaBodyConfig from './config/koaBodyConfig.js'

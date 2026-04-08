@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import { TokenSecret, TokenExpire } from '../config/setting.js'
+import { TokenSecret, TokenExpire } from '../config/jwt.js'
 console.log(TokenSecret, TokenExpire)
 /**
  * 生成 Token
