@@ -1,8 +1,9 @@
 {
   "restartable": "rs",
   "ignore": [".git", ".svn", "node_modules/**/node_modules"],
-  "verbose": true,
+  "verbose": false,
   "watch": [],
+
   "env": {
     "NODE_ENV": "development",
     "REMOTE_ADDR": ""
@@ -11,5 +12,11 @@
     "NODE_ENV": "development",
     "REMOTE_ADDR": ""
   },
-  "ext": "ejs js json"
+  "ext": "ejs js json",
+  "events": {
+    "start": "echo [nodemon] dev server started",
+    "restart": "echo [nodemon] restarting after file changes",
+    "crash": "echo [nodemon] app crashed, waiting for file changes",
+    "quit": "echo [nodemon] dev server stopped"
+  }
 }
