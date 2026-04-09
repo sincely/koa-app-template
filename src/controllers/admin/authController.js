@@ -1,0 +1,257 @@
+/**
+ * @module 后台认证
+ * @description 处理后台登录、注册、退出和权限信息获取
+ */
+
+import adminAuthDao from '../../models/dao/adminAuthDao.js'
+import adminPermissionDao from '../../models/dao/adminPermissionDao.js'
+import { httpCode } from '../../config/httpError.js'
+import { businessCode, businessMsg } from '../../config/businessCode.js'
+import { defaultAdminRoleName } from '../../config/admin.js'
+import { hashPassword, comparePassword } from '../../utils/password.js'
+import { generateToken } from '../../utils/jwt.js'
+import { buildMenuTree, extractPermissionCodes } from '../../utils/adminPermission.js'
+
+const formatUserInfo = (user) => {
+  return {
+    id: user.id,
+    username: user.username,
+    email: user.email,
+    status: user.status,
+    avatar: user.avatar,
+    roleId: user.roleId,
+    roleName: user.roleName,
+    roleDescription: user.roleDescription
+  }
+}
+
+const buildPermissionSnapshot = async (roleId) => {
+  const menus = await adminPermissionDao.findMenusByRoleId(roleId)
+  const buttons = await adminPermissionDao.findButtonsByRoleId(roleId)
+
+  return {
+    menuTree: buildMenuTree(menus),
+    buttons,
+    permissionCodes: extractPermissionCodes(menus, buttons)
+  }
+}
+
+/**
+ * @summary 后台注册
+ * @description 注册后台账号并绑定默认角色，不包含验证码校验
+ * @api POST /admin/auth/register
+ * @param {string} username - 登录用户名
+ * @param {string} password - 登录密码
+ * @param {string} confirmPassword - 确认密码
+ * @param {string} email - 邮箱地址
+ * @returns {object} 200 - 注册成功
+ */
+const register = async (ctx) => {
+  const { username, password, email } = ctx.request.body
+
+  const existedUser = await adminAuthDao.findAdminUserByUsername(username)
+  if (existedUser) {
+    ctx.status = httpCode.ok
+    ctx.body = {
+      code: businessCode.userExist,
+      msg: businessMsg[businessCode.userExist]
+    }
+    return
+  }
+
+  const existedEmail = await adminAuthDao.findAdminUserByEmail(email)
+  if (existedEmail) {
+    ctx.status = httpCode.ok
+    ctx.body = {
+      code: businessCode.emailExist,
+      msg: businessMsg[businessCode.emailExist]
+    }
+    return
+  }
+
+  const defaultRole = await adminAuthDao.findRoleByName(defaultAdminRoleName)
+  if (!defaultRole) {
+    ctx.status = httpCode.internalServerError
+    ctx.body = {
+      code: businessCode.roleNotFound,
+      msg: businessMsg[businessCode.roleNotFound]
+    }
+    return
+  }
+
+  const passwordHash = await hashPassword(password)
+  const registerResult = await adminAuthDao.createAdminUser({
+    username,
+    email,
+    passwordHash,
+    roleId: defaultRole.roleId
+  })
+
+  if (registerResult.affectedRows !== 1) {
+    ctx.status = httpCode.internalServerError
+    ctx.body = {
+      code: businessCode.error,
+      msg: '注册失败'
+    }
+    return
+  }
+
+  ctx.status = httpCode.ok
+  ctx.body = {
+    code: businessCode.success,
+    msg: '注册成功',
+    data: {
+      username,
+      email,
+      roleName: defaultRole.roleName
+    }
+  }
+}
+
+/**
+ * @summary 后台登录
+ * @description 使用用户名和密码登录后台，返回 token、用户信息、菜单和权限数据
+ * @api POST /admin/auth/login
+ * @param {string} username - 登录用户名
+ * @param {string} password - 登录密码
+ * @returns {object} 200 - 登录成功
+ */
+const login = async (ctx) => {
+  const { username, password } = ctx.request.body
+
+  const user = await adminAuthDao.findAdminUserByUsername(username)
+  if (!user) {
+    ctx.status = httpCode.ok
+    ctx.body = {
+      code: businessCode.userLoginFail,
+      msg: businessMsg[businessCode.userLoginFail]
+    }
+    return
+  }
+
+  if (user.status !== 'active') {
+    ctx.status = httpCode.ok
+    ctx.body = {
+      code: businessCode.adminUserDisabled,
+      msg: businessMsg[businessCode.adminUserDisabled]
+    }
+    return
+  }
+
+  const passwordMatched = await comparePassword(password, user.password)
+  if (!passwordMatched) {
+    ctx.status = httpCode.ok
+    ctx.body = {
+      code: businessCode.userLoginFail,
+      msg: businessMsg[businessCode.userLoginFail]
+    }
+    return
+  }
+
+  const permissionSnapshot = await buildPermissionSnapshot(user.roleId)
+  const token = generateToken({
+    userId: user.id,
+    username: user.username,
+    roleId: user.roleId,
+    roleName: user.roleName
+  })
+
+  ctx.status = httpCode.ok
+  ctx.body = {
+    code: businessCode.success,
+    msg: '登录成功',
+    data: {
+      token,
+      user: formatUserInfo(user),
+      menus: permissionSnapshot.menuTree,
+      permissions: permissionSnapshot.permissionCodes,
+      buttons: permissionSnapshot.buttons
+    }
+  }
+}
+
+/**
+ * @summary 获取当前用户信息
+ * @description 获取当前登录后台用户的基础资料
+ * @api GET /admin/auth/profile
+ * @returns {object} 200 - 获取成功
+ */
+const getProfile = async (ctx) => {
+  const currentUser = await adminAuthDao.findAdminUserById(ctx.state.user.userId)
+  if (!currentUser) {
+    ctx.status = httpCode.unauthorized
+    ctx.body = {
+      code: businessCode.userNotFound,
+      msg: businessMsg[businessCode.userNotFound]
+    }
+    return
+  }
+
+  ctx.status = httpCode.ok
+  ctx.body = {
+    code: businessCode.success,
+    msg: '获取用户信息成功',
+    data: formatUserInfo(currentUser)
+  }
+}
+
+/**
+ * @summary 获取当前用户菜单
+ * @description 获取当前登录后台用户可访问的菜单树
+ * @api GET /admin/auth/menus
+ * @returns {object} 200 - 获取成功
+ */
+const getMenus = async (ctx) => {
+  const permissionSnapshot = await buildPermissionSnapshot(ctx.state.user.roleId)
+
+  ctx.status = httpCode.ok
+  ctx.body = {
+    code: businessCode.success,
+    msg: '获取菜单成功',
+    data: permissionSnapshot.menuTree
+  }
+}
+
+/**
+ * @summary 获取当前用户权限
+ * @description 获取当前登录后台用户的菜单、按钮和权限码
+ * @api GET /admin/auth/permissions
+ * @returns {object} 200 - 获取成功
+ */
+const getPermissions = async (ctx) => {
+  const permissionSnapshot = await buildPermissionSnapshot(ctx.state.user.roleId)
+
+  ctx.status = httpCode.ok
+  ctx.body = {
+    code: businessCode.success,
+    msg: '获取权限成功',
+    data: {
+      menus: permissionSnapshot.menuTree,
+      buttons: permissionSnapshot.buttons,
+      permissions: permissionSnapshot.permissionCodes
+    }
+  }
+}
+
+/**
+ * @summary 后台退出登录
+ * @description 退出当前后台登录会话
+ * @api POST /admin/auth/logout
+ * @returns {object} 200 - 退出成功
+ */
+const logout = async (ctx) => {
+  ctx.status = httpCode.ok
+  ctx.body = {
+    code: businessCode.success,
+    msg: '退出成功'
+  }
+}
+
+export default {
+  register,
+  login,
+  getProfile,
+  getMenus,
+  getPermissions,
+  logout
+}

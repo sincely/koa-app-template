@@ -1,4 +1,4 @@
-import { uploadDir } from './setting.js'
+import { uploadDir } from './server.js'
 
 const koaBodyConfig = {
   multipart: true,

@@ -32,7 +32,7 @@ const __dirname = path.dirname(__filename)
 const CONFIG = {
   controllersDir: path.resolve(__dirname, '../src/controllers'),
   outputFile: path.resolve(__dirname, '../docs/openapi.json'),
-  apiPrefix: '',
+  apiPrefix: '/api',
   // 完整的项目信息配置（Apifox 会导入这些信息）
   projectInfo: {
     title: 'Koa App Template API',
@@ -311,8 +311,8 @@ function convertToOpenApiFormat(moduleApis) {
 
       // 处理请求参数
       if (api.params.length > 0) {
-        if (['POST', 'PUT', 'PATCH'].includes(api.method)) {
-          // POST/PUT/PATCH 使用 requestBody
+        if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(api.method)) {
+          // POST/PUT/PATCH/DELETE 使用 requestBody
           const properties = {}
           const required = []
           const example = {}

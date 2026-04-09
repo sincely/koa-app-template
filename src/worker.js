@@ -2,12 +2,10 @@ import { cronQueue } from './jobs/queue.js'
 import exampleTaskProcessor from './jobs/processors/exampleTask.js'
 import { initScheduler } from './jobs/scheduler.js'
 import path from 'path'
-import { fileURLToPath } from 'url'
 import fs from 'fs'
 import dotenv from 'dotenv'
 
-// 确保环境变量被加载 (参考 setting.js 的逻辑)
-const __filename = fileURLToPath(import.meta.url)
+// 确保环境变量被加载 (与 config/env.js 保持一致)
 const nodeEnv = process.env.NODE_ENV || 'development'
 const envFilePath = path.resolve(process.cwd(), `.env.${nodeEnv}`)
 const fallbackEnvPath = path.resolve(process.cwd(), '.env')
