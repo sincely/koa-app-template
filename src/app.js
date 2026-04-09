@@ -1,7 +1,6 @@
 // 第三方库
 import Koa from 'koa'
 import KoaStatic from 'koa-static'
-import KoaBody from 'koa-body'
 import cors from 'koa2-cors'
 import session from 'koa-session'
 import KoaBodyParser from '@koa/bodyparser'
@@ -11,9 +10,10 @@ import { Port, staticDir } from './config/server.js'
 import { DocsPort, docsDir } from './config/docs.js'
 import logger from './config/logger.js'
 import corsConfig from './config/cors.js'
-import koaBodyConfig from './config/koaBodyConfig.js'
+import { bodyParserConfig } from './config/koaBodyConfig.js'
 
 // 中间件
+import requestId from './middleware/requestId.js'
 import loggerMiddleware from './middleware/logger.js'
 import error from './middleware/error.js'
 import rewriteUrl from './middleware/rewriteUrl.js'
@@ -25,6 +25,9 @@ import Routers from './routers/index.js'
 const app = new Koa()
 const docsApp = new Koa() // 文档服务实例
 app.keys = [process.env.SESSION_SECRET || process.env.JWT_SECRET || 'koa-app-template-session-secret']
+
+// 请求 ID 中间件（最先注册，确保后续所有中间件都能读取到 requestId）
+app.use(requestId)
 
 // HTTP请求日志中间件
 app.use(loggerMiddleware)
@@ -62,14 +65,11 @@ app.use(async (ctx, next) => {
   await next()
 })
 
-// 处理请求体数据
-app.use(KoaBody(koaBodyConfig))
+// 处理请求体数据（必须在路由之前注册）
+app.use(KoaBodyParser(bodyParserConfig))
 
 // 使用路由中间件
 app.use(Routers.routes()).use(Routers.allowedMethods())
-
-// 处理请求体数据
-app.use(KoaBodyParser())
 
 // 配置文档服务 (docsify)
 docsApp.use(async (ctx, next) => {

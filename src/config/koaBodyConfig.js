@@ -1,19 +1,22 @@
 import { uploadDir } from './server.js'
 
-const koaBodyConfig = {
+/**
+ * @koa/bodyparser 配置
+ * 统一替代 koa-body，支持 JSON / Form / 文本以及 multipart 文件上传
+ */
+export const bodyParserConfig = {
+  enableTypes: ['json', 'form', 'text', 'xml'],
+  // 最大 body 大小（JSON / Form）
+  jsonLimit: '10mb',
+  formLimit: '10mb',
+  // multipart 文件上传（通过 formidable）
   multipart: true,
-  // parsedMethods默认是['POST', 'PUT', 'PATCH']
-  parsedMethods: ['POST', 'PUT', 'PATCH', 'GET', 'HEAD', 'DELETE'],
   formidable: {
     uploadDir: uploadDir, // 设置文件上传目录
-    keepExtensions: true, // 保持文件的后缀
-    maxFieldsSize: 2 * 1024 * 1024, // 文件上传大小限制
-    onFileBegin: (_name, _file) => {
-      // 文件上传前的设置
-      // console.log(`name: ${name}`);
-      // console.log(file);
-    }
+    keepExtensions: true, // 保持文件的后缀名
+    maxFileSize: 10 * 1024 * 1024 // 文件最大 10MB
   }
 }
 
-export default koaBodyConfig
+// 向后兼容：默认导出保持不变
+export default bodyParserConfig

@@ -23,7 +23,7 @@ export const validateBody = (schema) => async (ctx, next) => {
   const parsed = schema.safeParse(ctx.request.body)
   if (!parsed.success) {
     ctx.status = httpCode.badRequest
-    ctx.body = createErrorResponse(ctx.status, firstZodMessage(parsed.error))
+    ctx.body = createErrorResponse(firstZodMessage(parsed.error), ctx.status)
     return
   }
 
@@ -43,7 +43,7 @@ export const validateQuery = (schema) => async (ctx, next) => {
 
   if (!parsed.success) {
     ctx.status = httpCode.badRequest
-    ctx.body = createErrorResponse(ctx.status, firstZodMessage(parsed.error))
+    ctx.body = createErrorResponse(firstZodMessage(parsed.error), ctx.status)
     return
   }
 
