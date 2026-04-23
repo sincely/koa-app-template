@@ -1,0 +1,51 @@
+# soybean-admin-mock
+
+## Docs
+- [🦊一分钟，了解 Apifox ！](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/doc-2825188.md):
+
+## API Docs
+- Auth [用户名+密码登录](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-100526985.md):
+- Auth [获取用户信息](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-120399825.md):
+- Auth [刷新token](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-120415125.md):
+- Auth [自定义后端错误](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-158477619.md):
+- 前端路由 [获取用户路由数据](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-120415303.md):
+- 前端路由 [路由是否存在](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-120415373.md): 当用户访问一个路由失败时，有可能是没有该路由的权限，或者没有该路由，所以需要判断路由是否存在
+- 前端路由 [获取固定的路由数据(不需要权限)](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-158516240.md):
+- 前端路由 [获取react用户路由](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-273820808.md):
+- 调试 [debug](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-125438392.md):
+- 调试 [debug post](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-134021864.md):
+- 系统管理 [系统管理 - 获取角色列表](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-145344387.md):
+- 系统管理 [系统管理 - 获取用户列表](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-149754769.md):
+- 系统管理 [系统管理 - 获取用户列表(废弃)](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-145387463.md):
+- 系统管理 [获取所有角色](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-145409928.md):
+- 系统管理 [获取菜单列表](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-145421249.md):
+- 系统管理 [系统管理 - 获取菜单列表](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-157945109.md):
+- 系统管理 [获取所有页面组件](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-157988353.md):
+- 系统管理 [获取菜单树](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-158414289.md):
+- 项目配置 [获取用户配置](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-229492806.md):
+- 项目配置 [保存用户配置](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-229493074.md):
+- 用户 [postApiUsersLogin](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-281003433.md): 用户登录
+- 用户 [postApiUsersRegister](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-281003434.md): 用户注册
+- 用户 [getApiUsersProfile](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-281003435.md): 获取用户个人信息
+- 用户 [putApiUsersPassword](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-281003436.md): 更新用户密码
+- 用户 [postApiUsersLogout](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-281003437.md): 用户登出
+- 角色 [getApiRoles](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-281003438.md): 获取所有角色
+- 角色 [postApiRoles](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-281003439.md): 创建角色
+- 角色 [getApiRolesById](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-281003440.md): 获取角色详情
+- 角色 [putApiRolesById](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-281003441.md): 更新角色
+- 角色 [deleteApiRolesById](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-281003442.md): 删除角色
+- 权限 [getApiPermissions](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-281003443.md): 获取所有权限
+- 权限 [postApiPermissions](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-281003444.md): 创建权限
+- 权限 [getApiPermissionsById](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-281003445.md): 获取权限详情
+- 权限 [putApiPermissionsById](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-281003446.md): 更新权限
+- 权限 [deleteApiPermissionsById](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-281003447.md): 删除权限
+- 菜单 [getApiMenusUser](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-281003448.md): 获取用户菜单
+- 菜单 [getApiMenus](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-281003449.md): 获取所有菜单
+- 菜单 [postApiMenus](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-281003450.md): 创建菜单
+- 菜单 [getApiMenusById](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-281003451.md): 获取菜单详情
+- 菜单 [putApiMenusById](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-281003452.md): 更新菜单
+- 菜单 [deleteApiMenusById](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-281003453.md): 删除菜单
+- 文件 [postApiFilesUpload](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-281003454.md): 上传文件
+- 文件 [getApiFilesById](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-281003455.md): 获取文件信息
+- 文件 [deleteApiFilesById](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-281003456.md): 删除文件
+- 文件 [getApiFilesUser](https://s.apifox.cn/35c8727a-d3ab-47e9-8863-ef8e37df6887/api-281003457.md): 获取用户文件列表
