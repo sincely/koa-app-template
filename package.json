@@ -28,7 +28,7 @@
     "lint:fix": "eslint . --fix",
     "prettier:fix": "prettier --write .",
     "lint-staged": "lint-staged",
-    "prepare": "node -e \"if (process.env.NODE_ENV !== 'production') { require('child_process').execSync('husky install', { stdio: 'inherit' }) }\"",
+    "prepare": "node scripts/prepare.js",
     "docs:openapi": "node scripts/generateApiDoc.js",
     "docs:md": "node scripts/generateApiMd.js",
     "docs": "npm run docs:openapi && npm run docs:md",
