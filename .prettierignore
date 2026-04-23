@@ -20,3 +20,4 @@
 .editorconfig
 yarn.lock
 .npmrc
+pnpm-lock.yaml
