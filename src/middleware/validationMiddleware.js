@@ -1,6 +1,12 @@
 import { createErrorResponse } from '../utils/createResponse.js'
 import { httpCode } from '../config/httpError.js'
 
+/**
+ * 将 Zod 错误对象转换为统一的错误详情结构。
+ * 该函数可用于后续扩展错误响应时返回完整 issue 列表。
+ * @param {import('zod').ZodError | unknown} error
+ * @returns {{path: string, message: string, code: string}[]}
+ */
 const toZodErrorDetails = (error) => {
   const issues = Array.isArray(error?.issues) ? error.issues : []
   return issues.map((issue) => ({
@@ -10,12 +16,19 @@ const toZodErrorDetails = (error) => {
   }))
 }
 
+/**
+ * 取 Zod 首条错误信息，若为空则返回默认文案。
+ * @param {import('zod').ZodError | unknown} error
+ * @returns {string}
+ */
 const firstZodMessage = (error) => {
   const issues = Array.isArray(error?.issues) ? error.issues : []
   return issues[0]?.message || 'Validation failed'
 }
 
 /**
+ * 校验请求体（body），失败时直接返回 400。
+ * 校验通过后会把数据同步到 `ctx.request.body` 与 `ctx.state.data`。
  * @param {import('zod').ZodTypeAny} schema
  * @returns {import('koa').Middleware}
  */

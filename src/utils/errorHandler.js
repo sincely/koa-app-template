@@ -1,19 +1,23 @@
 import { createErrorResponse, createFailResponse } from './createResponse.js'
 
-/** @typedef {import('koa').Context} Context */
-/** @typedef {import('koa').Next} Next */
-
+/**
+ * 判断错误对象是否为 HTTP 错误（包含可用状态码）。
+ * 兼容常见的 `status` 与 `statusCode` 字段。
+ * @param {unknown} err
+ * @returns {boolean}
+ */
 const isHttpError = (err) => {
   if (!err || typeof err !== 'object') {
     return false
   }
-  const status = /** @type {any} */ (err).status ?? /** @type {any} */ (err).statusCode
+  const status = err.status ?? err.statusCode
   return typeof status === 'number' && Number.isFinite(status)
 }
 
 /**
- * @param {(ctx: Context, next: Next) => (Promise<void> | void)} controller
- * @returns {(ctx: Context, next: Next) => Promise<void>}
+ * 包装 controller，统一捕获异常并输出标准响应。
+ * - HTTP 异常：返回失败响应（保留状态码）
+ * - 非 HTTP 异常：返回 500 错误响应
  */
 export const errorControllerWrapper = (controller) => {
   return async (ctx, next) => {

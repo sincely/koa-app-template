@@ -1,3 +1,11 @@
+/**
+ * 解析菜单 meta 字段：
+ * - 已是对象则原样返回
+ * - 字符串则尝试 JSON.parse
+ * - 其他情况返回空对象
+ * @param {unknown} meta
+ * @returns {Record<string, any>}
+ */
 const parseMeta = (meta) => {
   if (!meta) {
     return {}
@@ -14,6 +22,11 @@ const parseMeta = (meta) => {
   }
 }
 
+/**
+ * 规范化数据库菜单结构，转换为前端路由树节点格式。
+ * @param {{id:number,parent_id:number|null,path:string,name:string,component?:string,redirect?:string,meta?:unknown}} menu
+ * @returns {{id:number,parentId:number|null,path:string,name:string,component?:string,redirect?:string,meta:Record<string, any>,children:any[]}}
+ */
 const normalizeMenu = (menu) => {
   return {
     id: menu.id,
@@ -27,6 +40,11 @@ const normalizeMenu = (menu) => {
   }
 }
 
+/**
+ * 根据扁平菜单列表构建树形菜单。
+ * @param {Array<{id:number,parent_id:number|null,path:string,name:string,component?:string,redirect?:string,meta?:unknown}>} menuList
+ * @returns {Array<any>}
+ */
 export const buildMenuTree = (menuList) => {
   const menuMap = new Map()
   const roots = []
@@ -46,6 +64,15 @@ export const buildMenuTree = (menuList) => {
   return roots
 }
 
+/**
+ * 提取权限编码集合：
+ * - routePaths: 允许访问的路径
+ * - routeNames: 允许访问的路由名称
+ * - buttons: 允许使用的按钮权限编码
+ * @param {Array<{path:string,name:string}>} menus
+ * @param {Array<{buttonName?:string}>} buttons
+ * @returns {{routePaths:string[], routeNames:string[], buttons:string[]}}
+ */
 export const extractPermissionCodes = (menus, buttons) => {
   return {
     routePaths: menus.map((menu) => menu.path),

@@ -1,5 +1,10 @@
 import { query } from '../../utils/db.js'
 
+/**
+ * 根据角色 ID 查询可访问菜单列表。
+ * @param {number} roleId
+ * @returns {Promise<Array<any>>}
+ */
 const findMenusByRoleId = async (roleId) => {
   const sql = `
     select distinct
@@ -19,6 +24,11 @@ const findMenusByRoleId = async (roleId) => {
   return query(sql, [roleId])
 }
 
+/**
+ * 根据角色 ID 查询可用按钮权限列表。
+ * @param {number} roleId
+ * @returns {Promise<Array<any>>}
+ */
 const findButtonsByRoleId = async (roleId) => {
   const sql = `
     select distinct
