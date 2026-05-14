@@ -8,12 +8,12 @@ import { httpCode } from '../../config/httpError.js'
 import { businessCode, businessMsg } from '../../config/businessCode.js'
 
 /**
- * @summary 用户登录
- * @description 验证用户名和密码，登录成功后将用户信息保存到 session
+ * 用户登录 - 验证用户名和密码
  * @api POST /user/login
- * @param {string} userName - 用户名（以字母开头，允许5-16字节，允许字母数字下划线）
- * @param {string} password - 密码（以字母开头，长度在6~18之间，只能包含字母、数字和下划线）
- * @returns {User} 200 - 登录成功返回用户信息
+ * @description 用户模块 - 用户登录、注册、查询用户名等功能
+ * @auth public
+ * @body {string} username - 用户名（以字母开头，允许5-16字节，允许字母数字下划线）
+ * @body {string} password - 密码（以字母开头，长度在6~18之间，只能包含字母、数字和下划线）
  */
 const login = async (ctx) => {
   // 参数已由路由层 Zod 中间件校验，可直接使用
@@ -62,11 +62,11 @@ const login = async (ctx) => {
 }
 
 /**
- * @summary 查询用户名是否存在
- * @description 查询数据库中是否已存在指定用户名，用于注册前的前端校验
+ * 查询用户名是否存在 - 用于注册前的前端校验
  * @api POST /user/findUserName
- * @param {string} userName - 要查询的用户名
- * @returns {Object} 200 - 查询结果
+ * @description 用户模块
+ * @auth public
+ * @body {string} username - 要查询的用户名
  */
 const findUserName = async (ctx) => {
   // 参数已由路由层 Zod 中间件校验
@@ -107,12 +107,12 @@ const findUserName = async (ctx) => {
 }
 
 /**
- * @summary 用户注册
- * @description 注册新用户，会先检查用户名是否已存在，不存在则创建新用户
+ * 用户注册 - 检查用户名后创建新用户
  * @api POST /user/register
- * @param {string} userName - 用户名（以字母开头，允许5-16字节，允许字母数字下划线）
- * @param {string} password - 密码（以字母开头，长度在6~18之间，只能包含字母、数字和下划线）
- * @returns {Object} 200 - 注册结果
+ * @description 用户模块
+ * @auth public
+ * @body {string} username - 用户名（以字母开头，允许5-16字节，允许字母数字下划线）
+ * @body {string} password - 密码（以字母开头，长度在6~18之间，只能包含字母、数字和下划线）
  */
 const register = async (ctx) => {
   // 参数已由路由层 Zod 中间件校验

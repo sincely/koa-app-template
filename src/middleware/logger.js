@@ -4,6 +4,10 @@ import logger from '../config/logger.js'
 const httpLogger = pinoHttp({
   logger,
   customLogLevel: function (req, res, err) {
+    // 不记录 /docs（Swagger UI）相关的访问日志
+    if (req.url && req.url.startsWith('/docs')) {
+      return 'silent'
+    }
     if (res.statusCode >= 400 && res.statusCode < 500) {
       return 'warn'
     } else if (res.statusCode >= 500 || err) {

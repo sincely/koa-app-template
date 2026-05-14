@@ -10,15 +10,14 @@ import { httpCode } from '../../config/httpError.js'
 import { hashPassword } from '../../utils/password.js'
 
 /**
- * @summary 获取用户列表
- * @description 分页获取后台用户列表，并返回角色选项
+ * 获取用户列表 - 分页查询并返回角色选项
  * @api GET /admin/system/users
- * @param {number} page - 当前页码
- * @param {number} pageSize - 每页数量
- * @param {string} keyword - 用户名或邮箱关键词
- * @param {string} status - 用户状态
- * @param {number} roleId - 角色 ID
- * @returns {object} 200 - 获取成功
+ * @description 用户管理 - 后台用户管理相关的增删改查
+ * @query {integer} page - 当前页码
+ * @query {integer} pageSize - 每页数量
+ * @query {string} [keyword] - 用户名或邮箱关键词
+ * @query {string} [status] - 用户状态
+ * @query {integer} [roleId] - 角色 ID
  */
 const listUsers = async (ctx) => {
   const { page, pageSize, keyword, status, roleId } = ctx.query
@@ -46,20 +45,19 @@ const listUsers = async (ctx) => {
 }
 
 /**
- * @summary 创建用户
- * @description 新增后台用户并绑定角色
+ * 创建用户 - 新增后台用户并绑定角色
  * @api POST /admin/system/users
- * @param {string} username - 用户名
- * @param {string} password - 登录密码
- * @param {string} gender - 性别
- * @param {number} age - 年龄
- * @param {string} idCard - 身份证号
- * @param {string} email - 邮箱地址
- * @param {string} address - 联系地址
- * @param {string} status - 用户状态
- * @param {string} avatar - 头像地址
- * @param {number} roleId - 角色 ID
- * @returns {object} 200 - 创建成功
+ * @description 用户管理
+ * @body {string} username - 用户名
+ * @body {string} password - 登录密码
+ * @body {string} [gender] - 性别
+ * @body {integer} [age] - 年龄
+ * @body {string} [idCard] - 身份证号
+ * @body {string} email - 邮箱地址
+ * @body {string} [address] - 联系地址
+ * @body {string} [status] - 用户状态
+ * @body {string} [avatar] - 头像地址
+ * @body {integer} roleId - 角色 ID
  */
 const createUser = async (ctx) => {
   const { username, password, gender, age, idCard, email, address, status, avatar, roleId } = ctx.request.body
@@ -120,20 +118,19 @@ const createUser = async (ctx) => {
 }
 
 /**
- * @summary 更新用户
- * @description 更新后台用户资料、角色或密码
+ * 更新用户 - 更新资料、角色或密码
  * @api PUT /admin/system/users
- * @param {number} id - 用户 ID
- * @param {string} password - 新密码
- * @param {string} gender - 性别
- * @param {number} age - 年龄
- * @param {string} idCard - 身份证号
- * @param {string} email - 邮箱地址
- * @param {string} address - 联系地址
- * @param {string} status - 用户状态
- * @param {string} avatar - 头像地址
- * @param {number} roleId - 角色 ID
- * @returns {object} 200 - 更新成功
+ * @description 用户管理
+ * @body {integer} id - 用户 ID
+ * @body {string} [password] - 新密码
+ * @body {string} [gender] - 性别
+ * @body {integer} [age] - 年龄
+ * @body {string} [idCard] - 身份证号
+ * @body {string} [email] - 邮箱地址
+ * @body {string} [address] - 联系地址
+ * @body {string} [status] - 用户状态
+ * @body {string} [avatar] - 头像地址
+ * @body {integer} [roleId] - 角色 ID
  */
 const updateUser = async (ctx) => {
   const { id, password, email, idCard, roleId, ...rest } = ctx.request.body
@@ -196,11 +193,10 @@ const updateUser = async (ctx) => {
 }
 
 /**
- * @summary 删除用户
- * @description 删除指定后台用户
+ * 删除用户
  * @api DELETE /admin/system/users
- * @param {number} id - 用户 ID
- * @returns {object} 200 - 删除成功
+ * @description 用户管理
+ * @body {integer} id - 用户 ID
  */
 const deleteUser = async (ctx) => {
   const { id } = ctx.request.body

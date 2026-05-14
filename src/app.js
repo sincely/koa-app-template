@@ -7,7 +7,6 @@ import KoaBodyParser from '@koa/bodyparser'
 
 // 配置文件
 import { Port, staticDir } from './config/server.js'
-import { DocsPort, docsDir } from './config/docs.js'
 import logger from './config/logger.js'
 import corsConfig from './config/cors.js'
 import { bodyParserConfig } from './config/koaBodyConfig.js'
@@ -22,8 +21,10 @@ import compress from './middleware/compress.js'
 // 路由
 import Routers from './routers/index.js'
 
+// 插件
+import { registerSwagger } from './plugins/swagger.js'
+
 const app = new Koa()
-const docsApp = new Koa() // 文档服务实例
 app.keys = [process.env.SESSION_SECRET || process.env.JWT_SECRET || 'koa-app-template-session-secret']
 
 // 请求 ID 中间件（最先注册，确保后续所有中间件都能读取到 requestId）
@@ -71,15 +72,8 @@ app.use(KoaBodyParser(bodyParserConfig))
 // 使用路由中间件
 app.use(Routers.routes()).use(Routers.allowedMethods())
 
-// 配置文档服务 (docsify)
-docsApp.use(async (ctx, next) => {
-  // 默认访问 index.html
-  if (ctx.path === '/') {
-    ctx.path = '/index.html'
-  }
-  await next()
-})
-docsApp.use(KoaStatic(docsDir))
+// 注册 Swagger API 文档（替代原 docsify 文档服务）
+registerSwagger(app)
 
 // 监听服务器启动端口
 // 仅在非 Vercel 环境下启动服务器
@@ -88,11 +82,7 @@ docsApp.use(KoaStatic(docsDir))
 if (!process.env.VERCEL) {
   app.listen(Port, () => {
     logger.info(`服务器启动在 http://localhost:${Port}`)
-  })
-
-  // 启动文档服务
-  docsApp.listen(DocsPort, () => {
-    logger.info(`接口文档服务启动在 http://localhost:${DocsPort}`)
+    logger.info(`Swagger 文档地址 http://localhost:${Port}/docs`)
   })
 }
 

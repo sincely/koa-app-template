@@ -38,14 +38,14 @@ const buildPermissionSnapshot = async (roleId) => {
 }
 
 /**
- * @summary 后台注册
- * @description 注册后台账号并绑定默认角色，不包含验证码校验
+ * 后台注册 - 注册后台账号并绑定默认角色
  * @api POST /admin/auth/register
- * @param {string} username - 登录用户名
- * @param {string} password - 登录密码
- * @param {string} confirmPassword - 确认密码
- * @param {string} email - 邮箱地址
- * @returns {object} 200 - 注册成功
+ * @description 后台认证 - 后台登录、注册、退出和权限信息获取
+ * @auth public
+ * @body {string} username - 登录用户名
+ * @body {string} password - 登录密码
+ * @body {string} confirmPassword - 确认密码
+ * @body {string} email - 邮箱地址
  */
 const register = async (ctx) => {
   const { username, password, email } = ctx.request.body
@@ -110,12 +110,12 @@ const register = async (ctx) => {
 }
 
 /**
- * @summary 后台登录
- * @description 使用用户名和密码登录后台，返回 token、用户信息、菜单和权限数据
+ * 后台登录 - 返回 token、用户信息、菜单和权限数据
  * @api POST /admin/auth/login
- * @param {string} username - 登录用户名
- * @param {string} password - 登录密码
- * @returns {object} 200 - 登录成功
+ * @description 后台认证
+ * @auth public
+ * @body {string} username - 登录用户名
+ * @body {string} password - 登录密码
  */
 const login = async (ctx) => {
   const { username, password } = ctx.request.body
@@ -172,10 +172,9 @@ const login = async (ctx) => {
 }
 
 /**
- * @summary 获取当前用户信息
- * @description 获取当前登录后台用户的基础资料
+ * 获取当前用户信息
  * @api GET /admin/auth/profile
- * @returns {object} 200 - 获取成功
+ * @description 后台认证
  */
 const getProfile = async (ctx) => {
   const currentUser = await adminAuthDao.findAdminUserById(ctx.state.user.userId)
@@ -197,10 +196,9 @@ const getProfile = async (ctx) => {
 }
 
 /**
- * @summary 获取当前用户菜单
- * @description 获取当前登录后台用户可访问的菜单树
+ * 获取当前用户菜单
  * @api GET /admin/auth/menus
- * @returns {object} 200 - 获取成功
+ * @description 后台认证
  */
 const getMenus = async (ctx) => {
   const permissionSnapshot = await buildPermissionSnapshot(ctx.state.user.roleId)
@@ -214,10 +212,9 @@ const getMenus = async (ctx) => {
 }
 
 /**
- * @summary 获取当前用户权限
- * @description 获取当前登录后台用户的菜单、按钮和权限码
+ * 获取当前用户权限
  * @api GET /admin/auth/permissions
- * @returns {object} 200 - 获取成功
+ * @description 后台认证
  */
 const getPermissions = async (ctx) => {
   const permissionSnapshot = await buildPermissionSnapshot(ctx.state.user.roleId)
@@ -235,10 +232,9 @@ const getPermissions = async (ctx) => {
 }
 
 /**
- * @summary 后台退出登录
- * @description 将当前 Token 加入 Redis 黑名单，确保退出后 Token 立即失效
+ * 后台退出登录 - Token 加入 Redis 黑名单
  * @api POST /admin/auth/logout
- * @returns {object} 200 - 退出成功
+ * @description 后台认证
  */
 const logout = async (ctx) => {
   const token = ctx.state.token

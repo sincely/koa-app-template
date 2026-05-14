@@ -20,10 +20,9 @@ const toMenuPayload = ({ path, name, component, redirect, meta, parentId }) => {
 }
 
 /**
- * @summary 获取菜单列表
- * @description 获取菜单平铺列表和树形结构
+ * 获取菜单列表 - 平铺列表和树形结构
  * @api GET /admin/system/menus
- * @returns {object} 200 - 获取成功
+ * @description 菜单管理 - 后台菜单管理相关的增删改查
  */
 const listMenus = async (ctx) => {
   const menus = await adminMenuDao.listMenus()
@@ -40,16 +39,15 @@ const listMenus = async (ctx) => {
 }
 
 /**
- * @summary 创建菜单
- * @description 创建新的后台菜单节点
+ * 创建菜单
  * @api POST /admin/system/menus
- * @param {string} path - 菜单访问路径
- * @param {string} name - 菜单名称
- * @param {string} component - 前端组件路径
- * @param {string} redirect - 重定向路径
- * @param {object} meta - 菜单元信息
- * @param {number} parentId - 父级菜单 ID
- * @returns {object} 200 - 创建成功
+ * @description 菜单管理
+ * @body {string} path - 菜单访问路径
+ * @body {string} name - 菜单名称
+ * @body {string} [component] - 前端组件路径
+ * @body {string} [redirect] - 重定向路径
+ * @body {object} [meta] - 菜单元信息
+ * @body {integer} [parentId] - 父级菜单 ID
  */
 const createMenu = async (ctx) => {
   const { path, name, component, redirect, meta, parentId } = ctx.request.body
@@ -92,17 +90,16 @@ const createMenu = async (ctx) => {
 }
 
 /**
- * @summary 更新菜单
- * @description 更新后台菜单节点信息
+ * 更新菜单
  * @api PUT /admin/system/menus
- * @param {number} id - 菜单 ID
- * @param {string} path - 菜单访问路径
- * @param {string} name - 菜单名称
- * @param {string} component - 前端组件路径
- * @param {string} redirect - 重定向路径
- * @param {object} meta - 菜单元信息
- * @param {number} parentId - 父级菜单 ID
- * @returns {object} 200 - 更新成功
+ * @description 菜单管理
+ * @body {integer} id - 菜单 ID
+ * @body {string} [path] - 菜单访问路径
+ * @body {string} [name] - 菜单名称
+ * @body {string} [component] - 前端组件路径
+ * @body {string} [redirect] - 重定向路径
+ * @body {object} [meta] - 菜单元信息
+ * @body {integer} [parentId] - 父级菜单 ID
  */
 const updateMenu = async (ctx) => {
   const { id, path, name, component, redirect, meta, parentId } = ctx.request.body
@@ -179,11 +176,10 @@ const updateMenu = async (ctx) => {
 }
 
 /**
- * @summary 删除菜单
- * @description 删除指定菜单节点
+ * 删除菜单
  * @api DELETE /admin/system/menus
- * @param {number} id - 菜单 ID
- * @returns {object} 200 - 删除成功
+ * @description 菜单管理
+ * @body {integer} id - 菜单 ID
  */
 const deleteMenu = async (ctx) => {
   const { id } = ctx.request.body

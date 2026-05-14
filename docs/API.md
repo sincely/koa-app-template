@@ -43,13 +43,13 @@
 
 ### 后台认证
 
-后台认证相关接口
+后台登录、注册、退出和权限信息获取
 
 #### 📝 POST 后台注册
 
 `POST /api/admin/auth/register`
 
-**描述**: 注册后台账号并绑定默认角色，不包含验证码校验
+**描述**: 注册后台账号并绑定默认角色
 
 ##### 请求参数 (Body)
 
@@ -75,7 +75,7 @@
 
 ##### 响应
 
-**200** - 注册成功
+**200** - 后台注册成功
 
 ```json
 {
@@ -91,7 +91,7 @@
 
 `POST /api/admin/auth/login`
 
-**描述**: 使用用户名和密码登录后台，返回 token、用户信息、菜单和权限数据
+**描述**: 返回 token、用户信息、菜单和权限数据
 
 ##### 请求参数 (Body)
 
@@ -113,7 +113,7 @@
 
 ##### 响应
 
-**200** - 登录成功
+**200** - 后台登录成功
 
 ```json
 {
@@ -129,11 +129,9 @@
 
 `GET /api/admin/auth/profile`
 
-**描述**: 获取当前登录后台用户的基础资料
-
 ##### 响应
 
-**200** - 获取成功
+**200** - 获取当前用户信息成功
 
 ```json
 {
@@ -149,11 +147,9 @@
 
 `GET /api/admin/auth/menus`
 
-**描述**: 获取当前登录后台用户可访问的菜单树
-
 ##### 响应
 
-**200** - 获取成功
+**200** - 获取当前用户菜单成功
 
 ```json
 {
@@ -169,11 +165,9 @@
 
 `GET /api/admin/auth/permissions`
 
-**描述**: 获取当前登录后台用户的菜单、按钮和权限码
-
 ##### 响应
 
-**200** - 获取成功
+**200** - 获取当前用户权限成功
 
 ```json
 {
@@ -189,11 +183,11 @@
 
 `POST /api/admin/auth/logout`
 
-**描述**: 退出当前后台登录会话
+**描述**: Token 加入 Redis 黑名单
 
 ##### 响应
 
-**200** - 退出成功
+**200** - 后台退出登录成功
 
 ```json
 {
@@ -207,17 +201,17 @@
 
 ### 菜单管理
 
-菜单管理相关接口
+后台菜单管理相关的增删改查
 
 #### � GET 获取菜单列表
 
 `GET /api/admin/system/menus`
 
-**描述**: 获取菜单平铺列表和树形结构
+**描述**: 平铺列表和树形结构
 
 ##### 响应
 
-**200** - 获取成功
+**200** - 获取菜单列表成功
 
 ```json
 {
@@ -233,8 +227,6 @@
 
 `POST /api/admin/system/menus`
 
-**描述**: 创建新的后台菜单节点
-
 ##### 请求参数 (Body)
 
 **Content-Type**: `application/json`
@@ -243,10 +235,10 @@
 | :---: | :---: | :---: | :---: | :---: |
 | `path` | string | ✅ | 菜单访问路径 | `` |
 | `name` | string | ✅ | 菜单名称 | `testuser` |
-| `component` | string | ✅ | 前端组件路径 | `` |
-| `redirect` | string | ✅ | 重定向路径 | `` |
-| `meta` | object | ✅ | 菜单元信息 | `[object Object]` |
-| `parentId` | number | ✅ | 父级菜单 ID | `1` |
+| `component` | string | ❌ | 前端组件路径 | `` |
+| `redirect` | string | ❌ | 重定向路径 | `` |
+| `meta` | object | ❌ | 菜单元信息 | `` |
+| `parentId` | integer | ❌ | 父级菜单 ID | `1` |
 
 **请求示例**:
 
@@ -256,14 +248,14 @@
   "name": "testuser",
   "component": "",
   "redirect": "",
-  "meta": {},
+  "meta": "",
   "parentId": 1
 }
 ```
 
 ##### 响应
 
-**200** - 创建成功
+**200** - 创建菜单成功
 
 ```json
 {
@@ -279,21 +271,19 @@
 
 `PUT /api/admin/system/menus`
 
-**描述**: 更新后台菜单节点信息
-
 ##### 请求参数 (Body)
 
 **Content-Type**: `application/json`
 
 | 参数名 | 类型 | 必填 | 描述 | 示例 |
 | :---: | :---: | :---: | :---: | :---: |
-| `id` | number | ✅ | 菜单 ID | `1` |
-| `path` | string | ✅ | 菜单访问路径 | `` |
-| `name` | string | ✅ | 菜单名称 | `testuser` |
-| `component` | string | ✅ | 前端组件路径 | `` |
-| `redirect` | string | ✅ | 重定向路径 | `` |
-| `meta` | object | ✅ | 菜单元信息 | `[object Object]` |
-| `parentId` | number | ✅ | 父级菜单 ID | `1` |
+| `id` | integer | ✅ | 菜单 ID | `1` |
+| `path` | string | ❌ | 菜单访问路径 | `` |
+| `name` | string | ❌ | 菜单名称 | `testuser` |
+| `component` | string | ❌ | 前端组件路径 | `` |
+| `redirect` | string | ❌ | 重定向路径 | `` |
+| `meta` | object | ❌ | 菜单元信息 | `` |
+| `parentId` | integer | ❌ | 父级菜单 ID | `1` |
 
 **请求示例**:
 
@@ -304,14 +294,14 @@
   "name": "testuser",
   "component": "",
   "redirect": "",
-  "meta": {},
+  "meta": "",
   "parentId": 1
 }
 ```
 
 ##### 响应
 
-**200** - 更新成功
+**200** - 更新菜单成功
 
 ```json
 {
@@ -327,15 +317,13 @@
 
 `DELETE /api/admin/system/menus`
 
-**描述**: 删除指定菜单节点
-
 ##### 请求参数 (Body)
 
 **Content-Type**: `application/json`
 
 | 参数名 | 类型 | 必填 | 描述 | 示例 |
 | :---: | :---: | :---: | :---: | :---: |
-| `id` | number | ✅ | 菜单 ID | `1` |
+| `id` | integer | ✅ | 菜单 ID | `1` |
 
 **请求示例**:
 
@@ -347,7 +335,7 @@
 
 ##### 响应
 
-**200** - 删除成功
+**200** - 删除菜单成功
 
 ```json
 {
@@ -361,17 +349,17 @@
 
 ### 角色管理
 
-角色管理相关接口
+后台角色及角色菜单权限的增删改查
 
 #### � GET 获取角色列表
 
 `GET /api/admin/system/roles`
 
-**描述**: 获取角色列表、绑定的菜单 ID 以及菜单选项
+**描述**: 含绑定的菜单 ID 和菜单选项
 
 ##### 响应
 
-**200** - 获取成功
+**200** - 获取角色列表成功
 
 ```json
 {
@@ -387,7 +375,7 @@
 
 `POST /api/admin/system/roles`
 
-**描述**: 创建新角色并绑定菜单权限
+**描述**: 并绑定菜单权限
 
 ##### 请求参数 (Body)
 
@@ -397,7 +385,7 @@
 | :---: | :---: | :---: | :---: | :---: |
 | `roleName` | string | ✅ | 角色名称 | `testuser` |
 | `description` | string | ✅ | 角色描述 | `` |
-| `routeIds` | array | ✅ | 关联菜单 ID 列表 | `` |
+| `routeIds` | array | ❌ | 关联菜单 ID 列表 | `1` |
 
 **请求示例**:
 
@@ -405,13 +393,13 @@
 {
   "roleName": "testuser",
   "description": "",
-  "routeIds": []
+  "routeIds": 1
 }
 ```
 
 ##### 响应
 
-**200** - 创建成功
+**200** - 创建角色成功
 
 ```json
 {
@@ -427,7 +415,7 @@
 
 `PUT /api/admin/system/roles`
 
-**描述**: 更新角色信息并重置角色菜单权限
+**描述**: 重置角色菜单权限
 
 ##### 请求参数 (Body)
 
@@ -435,10 +423,10 @@
 
 | 参数名 | 类型 | 必填 | 描述 | 示例 |
 | :---: | :---: | :---: | :---: | :---: |
-| `roleId` | number | ✅ | 角色 ID | `1` |
+| `roleId` | integer | ✅ | 角色 ID | `1` |
 | `roleName` | string | ✅ | 角色名称 | `testuser` |
 | `description` | string | ✅ | 角色描述 | `` |
-| `routeIds` | array | ✅ | 关联菜单 ID 列表 | `` |
+| `routeIds` | array | ❌ | 关联菜单 ID 列表 | `1` |
 
 **请求示例**:
 
@@ -447,13 +435,13 @@
   "roleId": 1,
   "roleName": "testuser",
   "description": "",
-  "routeIds": []
+  "routeIds": 1
 }
 ```
 
 ##### 响应
 
-**200** - 更新成功
+**200** - 更新角色成功
 
 ```json
 {
@@ -469,7 +457,7 @@
 
 `DELETE /api/admin/system/roles`
 
-**描述**: 删除角色及其菜单权限绑定
+**描述**: 清理角色菜单权限绑定
 
 ##### 请求参数 (Body)
 
@@ -477,7 +465,7 @@
 
 | 参数名 | 类型 | 必填 | 描述 | 示例 |
 | :---: | :---: | :---: | :---: | :---: |
-| `roleId` | number | ✅ | 角色 ID | `1` |
+| `roleId` | integer | ✅ | 角色 ID | `1` |
 
 **请求示例**:
 
@@ -489,7 +477,7 @@
 
 ##### 响应
 
-**200** - 删除成功
+**200** - 删除角色成功
 
 ```json
 {
@@ -503,27 +491,27 @@
 
 ### 用户管理
 
-用户管理相关接口
+后台用户管理相关的增删改查
 
 #### � GET 获取用户列表
 
 `GET /api/admin/system/users`
 
-**描述**: 分页获取后台用户列表，并返回角色选项
+**描述**: 分页查询并返回角色选项
 
 ##### 请求参数 (Query)
 
 | 参数名 | 类型 | 必填 | 描述 | 示例 |
 | :---: | :---: | :---: | :---: | :---: |
-| `page` | number | ✅ | 当前页码 | `1` |
-| `pageSize` | number | ✅ | 每页数量 | `1` |
-| `keyword` | string | ✅ | 用户名或邮箱关键词 | `` |
-| `status` | string | ✅ | 用户状态 | `` |
-| `roleId` | number | ✅ | 角色 ID | `1` |
+| `page` | integer | ✅ | 当前页码 | `1` |
+| `pageSize` | integer | ✅ | 每页数量 | `1` |
+| `keyword` | string | ❌ | 用户名或邮箱关键词 | `` |
+| `status` | string | ❌ | 用户状态 | `` |
+| `roleId` | integer | ❌ | 角色 ID | `1` |
 
 ##### 响应
 
-**200** - 获取成功
+**200** - 获取用户列表成功
 
 ```json
 {
@@ -549,14 +537,14 @@
 | :---: | :---: | :---: | :---: | :---: |
 | `username` | string | ✅ | 用户名 | `testuser` |
 | `password` | string | ✅ | 登录密码 | `Test123456` |
-| `gender` | string | ✅ | 性别 | `` |
-| `age` | number | ✅ | 年龄 | `0` |
-| `idCard` | string | ✅ | 身份证号 | `1` |
+| `gender` | string | ❌ | 性别 | `` |
+| `age` | integer | ❌ | 年龄 | `0` |
+| `idCard` | string | ❌ | 身份证号 | `1` |
 | `email` | string | ✅ | 邮箱地址 | `test@example.com` |
-| `address` | string | ✅ | 联系地址 | `` |
-| `status` | string | ✅ | 用户状态 | `` |
-| `avatar` | string | ✅ | 头像地址 | `` |
-| `roleId` | number | ✅ | 角色 ID | `1` |
+| `address` | string | ❌ | 联系地址 | `` |
+| `status` | string | ❌ | 用户状态 | `` |
+| `avatar` | string | ❌ | 头像地址 | `` |
+| `roleId` | integer | ✅ | 角色 ID | `1` |
 
 **请求示例**:
 
@@ -577,7 +565,7 @@
 
 ##### 响应
 
-**200** - 创建成功
+**200** - 创建用户成功
 
 ```json
 {
@@ -593,7 +581,7 @@
 
 `PUT /api/admin/system/users`
 
-**描述**: 更新后台用户资料、角色或密码
+**描述**: 更新资料、角色或密码
 
 ##### 请求参数 (Body)
 
@@ -601,16 +589,16 @@
 
 | 参数名 | 类型 | 必填 | 描述 | 示例 |
 | :---: | :---: | :---: | :---: | :---: |
-| `id` | number | ✅ | 用户 ID | `1` |
-| `password` | string | ✅ | 新密码 | `Test123456` |
-| `gender` | string | ✅ | 性别 | `` |
-| `age` | number | ✅ | 年龄 | `0` |
-| `idCard` | string | ✅ | 身份证号 | `1` |
-| `email` | string | ✅ | 邮箱地址 | `test@example.com` |
-| `address` | string | ✅ | 联系地址 | `` |
-| `status` | string | ✅ | 用户状态 | `` |
-| `avatar` | string | ✅ | 头像地址 | `` |
-| `roleId` | number | ✅ | 角色 ID | `1` |
+| `id` | integer | ✅ | 用户 ID | `1` |
+| `password` | string | ❌ | 新密码 | `Test123456` |
+| `gender` | string | ❌ | 性别 | `` |
+| `age` | integer | ❌ | 年龄 | `0` |
+| `idCard` | string | ❌ | 身份证号 | `1` |
+| `email` | string | ❌ | 邮箱地址 | `test@example.com` |
+| `address` | string | ❌ | 联系地址 | `` |
+| `status` | string | ❌ | 用户状态 | `` |
+| `avatar` | string | ❌ | 头像地址 | `` |
+| `roleId` | integer | ❌ | 角色 ID | `1` |
 
 **请求示例**:
 
@@ -631,7 +619,7 @@
 
 ##### 响应
 
-**200** - 更新成功
+**200** - 更新用户成功
 
 ```json
 {
@@ -647,15 +635,13 @@
 
 `DELETE /api/admin/system/users`
 
-**描述**: 删除指定后台用户
-
 ##### 请求参数 (Body)
 
 **Content-Type**: `application/json`
 
 | 参数名 | 类型 | 必填 | 描述 | 示例 |
 | :---: | :---: | :---: | :---: | :---: |
-| `id` | number | ✅ | 用户 ID | `1` |
+| `id` | integer | ✅ | 用户 ID | `1` |
 
 **请求示例**:
 
@@ -667,7 +653,7 @@
 
 ##### 响应
 
-**200** - 删除成功
+**200** - 删除用户成功
 
 ```json
 {
@@ -681,13 +667,13 @@
 
 ### 用户模块
 
-用户模块相关接口
+用户登录、注册、查询用户名等功能
 
 #### 📝 POST 用户登录
 
 `POST /api/user/login`
 
-**描述**: 验证用户名和密码，登录成功后将用户信息保存到 session
+**描述**: 验证用户名和密码
 
 ##### 请求参数 (Body)
 
@@ -695,21 +681,21 @@
 
 | 参数名 | 类型 | 必填 | 描述 | 示例 |
 | :---: | :---: | :---: | :---: | :---: |
-| `userName` | string | ✅ | 用户名（以字母开头，允许5-16字节，允许字母数字下划线） | `testuser` |
+| `username` | string | ✅ | 用户名（以字母开头，允许5-16字节，允许字母数字下划线） | `testuser` |
 | `password` | string | ✅ | 密码（以字母开头，长度在6~18之间，只能包含字母、数字和下划线） | `Test123456` |
 
 **请求示例**:
 
 ```json
 {
-  "userName": "testuser",
+  "username": "testuser",
   "password": "Test123456"
 }
 ```
 
 ##### 响应
 
-**200** - 登录成功返回用户信息
+**200** - 用户登录成功
 
 ```json
 {
@@ -725,7 +711,7 @@
 
 `POST /api/user/findUserName`
 
-**描述**: 查询数据库中是否已存在指定用户名，用于注册前的前端校验
+**描述**: 用于注册前的前端校验
 
 ##### 请求参数 (Body)
 
@@ -733,19 +719,19 @@
 
 | 参数名 | 类型 | 必填 | 描述 | 示例 |
 | :---: | :---: | :---: | :---: | :---: |
-| `userName` | string | ✅ | 要查询的用户名 | `testuser` |
+| `username` | string | ✅ | 要查询的用户名 | `testuser` |
 
 **请求示例**:
 
 ```json
 {
-  "userName": "testuser"
+  "username": "testuser"
 }
 ```
 
 ##### 响应
 
-**200** - 查询结果
+**200** - 查询用户名是否存在成功
 
 ```json
 {
@@ -761,7 +747,7 @@
 
 `POST /api/user/register`
 
-**描述**: 注册新用户，会先检查用户名是否已存在，不存在则创建新用户
+**描述**: 检查用户名后创建新用户
 
 ##### 请求参数 (Body)
 
@@ -769,21 +755,21 @@
 
 | 参数名 | 类型 | 必填 | 描述 | 示例 |
 | :---: | :---: | :---: | :---: | :---: |
-| `userName` | string | ✅ | 用户名（以字母开头，允许5-16字节，允许字母数字下划线） | `testuser` |
+| `username` | string | ✅ | 用户名（以字母开头，允许5-16字节，允许字母数字下划线） | `testuser` |
 | `password` | string | ✅ | 密码（以字母开头，长度在6~18之间，只能包含字母、数字和下划线） | `Test123456` |
 
 **请求示例**:
 
 ```json
 {
-  "userName": "testuser",
+  "username": "testuser",
   "password": "Test123456"
 }
 ```
 
 ##### 响应
 
-**200** - 注册结果
+**200** - 用户注册成功
 
 ```json
 {

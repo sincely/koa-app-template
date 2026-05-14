@@ -31,23 +31,23 @@
   "tags": [
     {
       "name": "后台认证",
-      "description": "后台认证相关接口"
+      "description": "后台登录、注册、退出和权限信息获取"
     },
     {
       "name": "菜单管理",
-      "description": "菜单管理相关接口"
+      "description": "后台菜单管理相关的增删改查"
     },
     {
       "name": "角色管理",
-      "description": "角色管理相关接口"
+      "description": "后台角色及角色菜单权限的增删改查"
     },
     {
       "name": "用户管理",
-      "description": "用户管理相关接口"
+      "description": "后台用户管理相关的增删改查"
     },
     {
       "name": "用户模块",
-      "description": "用户模块相关接口"
+      "description": "用户登录、注册、查询用户名等功能"
     }
   ],
   "paths": {
@@ -57,34 +57,8 @@
           "后台认证"
         ],
         "summary": "后台注册",
-        "description": "注册后台账号并绑定默认角色，不包含验证码校验",
-        "operationId": "post__admin_auth_register",
-        "responses": {
-          "200": {
-            "description": "注册成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "integer",
-                      "description": "业务状态码"
-                    },
-                    "msg": {
-                      "type": "string",
-                      "description": "响应消息"
-                    },
-                    "data": {
-                      "type": "object",
-                      "description": "响应数据"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
+        "description": "注册后台账号并绑定默认角色",
+        "security": [],
         "requestBody": {
           "required": true,
           "content": {
@@ -100,23 +74,23 @@
                 "properties": {
                   "username": {
                     "type": "string",
-                    "example": "testuser",
-                    "description": "登录用户名"
+                    "description": "登录用户名",
+                    "example": "testuser"
                   },
                   "password": {
                     "type": "string",
-                    "example": "Test123456",
-                    "description": "登录密码"
+                    "description": "登录密码",
+                    "example": "Test123456"
                   },
                   "confirmPassword": {
                     "type": "string",
-                    "example": "Test123456",
-                    "description": "确认密码"
+                    "description": "确认密码",
+                    "example": "Test123456"
                   },
                   "email": {
                     "type": "string",
-                    "example": "test@example.com",
-                    "description": "邮箱地址"
+                    "description": "邮箱地址",
+                    "example": "test@example.com"
                   }
                 }
               },
@@ -128,20 +102,10 @@
               }
             }
           }
-        }
-      }
-    },
-    "/api/admin/auth/login": {
-      "post": {
-        "tags": [
-          "后台认证"
-        ],
-        "summary": "后台登录",
-        "description": "使用用户名和密码登录后台，返回 token、用户信息、菜单和权限数据",
-        "operationId": "post__admin_auth_login",
+        },
         "responses": {
           "200": {
-            "description": "登录成功",
+            "description": "后台注册成功",
             "content": {
               "application/json": {
                 "schema": {
@@ -165,6 +129,17 @@
             }
           }
         },
+        "operationId": "post_admin_auth_register"
+      }
+    },
+    "/api/admin/auth/login": {
+      "post": {
+        "tags": [
+          "后台认证"
+        ],
+        "summary": "后台登录",
+        "description": "返回 token、用户信息、菜单和权限数据",
+        "security": [],
         "requestBody": {
           "required": true,
           "content": {
@@ -178,13 +153,13 @@
                 "properties": {
                   "username": {
                     "type": "string",
-                    "example": "testuser",
-                    "description": "登录用户名"
+                    "description": "登录用户名",
+                    "example": "testuser"
                   },
                   "password": {
                     "type": "string",
-                    "example": "Test123456",
-                    "description": "登录密码"
+                    "description": "登录密码",
+                    "example": "Test123456"
                   }
                 }
               },
@@ -194,7 +169,34 @@
               }
             }
           }
-        }
+        },
+        "responses": {
+          "200": {
+            "description": "后台登录成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "description": "业务状态码"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "description": "响应消息"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "响应数据"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "post_admin_auth_login"
       }
     },
     "/api/admin/auth/profile": {
@@ -203,11 +205,14 @@
           "后台认证"
         ],
         "summary": "获取当前用户信息",
-        "description": "获取当前登录后台用户的基础资料",
-        "operationId": "get__admin_auth_profile",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
-            "description": "获取成功",
+            "description": "获取当前用户信息成功",
             "content": {
               "application/json": {
                 "schema": {
@@ -230,7 +235,8 @@
               }
             }
           }
-        }
+        },
+        "operationId": "get_admin_auth_profile"
       }
     },
     "/api/admin/auth/menus": {
@@ -239,11 +245,14 @@
           "后台认证"
         ],
         "summary": "获取当前用户菜单",
-        "description": "获取当前登录后台用户可访问的菜单树",
-        "operationId": "get__admin_auth_menus",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
-            "description": "获取成功",
+            "description": "获取当前用户菜单成功",
             "content": {
               "application/json": {
                 "schema": {
@@ -266,7 +275,8 @@
               }
             }
           }
-        }
+        },
+        "operationId": "get_admin_auth_menus"
       }
     },
     "/api/admin/auth/permissions": {
@@ -275,11 +285,14 @@
           "后台认证"
         ],
         "summary": "获取当前用户权限",
-        "description": "获取当前登录后台用户的菜单、按钮和权限码",
-        "operationId": "get__admin_auth_permissions",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
-            "description": "获取成功",
+            "description": "获取当前用户权限成功",
             "content": {
               "application/json": {
                 "schema": {
@@ -302,7 +315,8 @@
               }
             }
           }
-        }
+        },
+        "operationId": "get_admin_auth_permissions"
       }
     },
     "/api/admin/auth/logout": {
@@ -311,11 +325,15 @@
           "后台认证"
         ],
         "summary": "后台退出登录",
-        "description": "将当前 Token 加入 Redis 黑名单，确保退出后 Token 立即失效",
-        "operationId": "post__admin_auth_logout",
+        "description": "Token 加入 Redis 黑名单",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
-            "description": "退出成功",
+            "description": "后台退出登录成功",
             "content": {
               "application/json": {
                 "schema": {
@@ -338,7 +356,8 @@
               }
             }
           }
-        }
+        },
+        "operationId": "post_admin_auth_logout"
       }
     },
     "/api/admin/system/menus": {
@@ -347,11 +366,15 @@
           "菜单管理"
         ],
         "summary": "获取菜单列表",
-        "description": "获取菜单平铺列表和树形结构",
-        "operationId": "get__admin_system_menus",
+        "description": "平铺列表和树形结构",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
-            "description": "获取成功",
+            "description": "获取菜单列表成功",
             "content": {
               "application/json": {
                 "schema": {
@@ -374,18 +397,76 @@
               }
             }
           }
-        }
+        },
+        "operationId": "get_admin_system_menus"
       },
       "post": {
         "tags": [
           "菜单管理"
         ],
         "summary": "创建菜单",
-        "description": "创建新的后台菜单节点",
-        "operationId": "post__admin_system_menus",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "path",
+                  "name"
+                ],
+                "properties": {
+                  "path": {
+                    "type": "string",
+                    "description": "菜单访问路径",
+                    "example": ""
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "菜单名称",
+                    "example": "testuser"
+                  },
+                  "component": {
+                    "type": "string",
+                    "description": "前端组件路径",
+                    "example": ""
+                  },
+                  "redirect": {
+                    "type": "string",
+                    "description": "重定向路径",
+                    "example": ""
+                  },
+                  "meta": {
+                    "type": "object",
+                    "description": "菜单元信息",
+                    "example": ""
+                  },
+                  "parentId": {
+                    "type": "integer",
+                    "description": "父级菜单 ID",
+                    "example": 1
+                  }
+                }
+              },
+              "example": {
+                "path": "",
+                "name": "testuser",
+                "component": "",
+                "redirect": "",
+                "meta": "",
+                "parentId": 1
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "创建成功",
+            "description": "创建菜单成功",
             "content": {
               "application/json": {
                 "schema": {
@@ -409,197 +490,18 @@
             }
           }
         },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "path",
-                  "name",
-                  "component",
-                  "redirect",
-                  "meta",
-                  "parentId"
-                ],
-                "properties": {
-                  "path": {
-                    "type": "string",
-                    "example": "",
-                    "description": "菜单访问路径"
-                  },
-                  "name": {
-                    "type": "string",
-                    "example": "testuser",
-                    "description": "菜单名称"
-                  },
-                  "component": {
-                    "type": "string",
-                    "example": "",
-                    "description": "前端组件路径"
-                  },
-                  "redirect": {
-                    "type": "string",
-                    "example": "",
-                    "description": "重定向路径"
-                  },
-                  "meta": {
-                    "type": "object",
-                    "example": {},
-                    "description": "菜单元信息"
-                  },
-                  "parentId": {
-                    "type": "number",
-                    "example": 1,
-                    "description": "父级菜单 ID"
-                  }
-                }
-              },
-              "example": {
-                "path": "",
-                "name": "testuser",
-                "component": "",
-                "redirect": "",
-                "meta": {},
-                "parentId": 1
-              }
-            }
-          }
-        }
+        "operationId": "post_admin_system_menus"
       },
       "put": {
         "tags": [
           "菜单管理"
         ],
         "summary": "更新菜单",
-        "description": "更新后台菜单节点信息",
-        "operationId": "put__admin_system_menus",
-        "responses": {
-          "200": {
-            "description": "更新成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "integer",
-                      "description": "业务状态码"
-                    },
-                    "msg": {
-                      "type": "string",
-                      "description": "响应消息"
-                    },
-                    "data": {
-                      "type": "object",
-                      "description": "响应数据"
-                    }
-                  }
-                }
-              }
-            }
+        "security": [
+          {
+            "bearerAuth": []
           }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "id",
-                  "path",
-                  "name",
-                  "component",
-                  "redirect",
-                  "meta",
-                  "parentId"
-                ],
-                "properties": {
-                  "id": {
-                    "type": "number",
-                    "example": 1,
-                    "description": "菜单 ID"
-                  },
-                  "path": {
-                    "type": "string",
-                    "example": "",
-                    "description": "菜单访问路径"
-                  },
-                  "name": {
-                    "type": "string",
-                    "example": "testuser",
-                    "description": "菜单名称"
-                  },
-                  "component": {
-                    "type": "string",
-                    "example": "",
-                    "description": "前端组件路径"
-                  },
-                  "redirect": {
-                    "type": "string",
-                    "example": "",
-                    "description": "重定向路径"
-                  },
-                  "meta": {
-                    "type": "object",
-                    "example": {},
-                    "description": "菜单元信息"
-                  },
-                  "parentId": {
-                    "type": "number",
-                    "example": 1,
-                    "description": "父级菜单 ID"
-                  }
-                }
-              },
-              "example": {
-                "id": 1,
-                "path": "",
-                "name": "testuser",
-                "component": "",
-                "redirect": "",
-                "meta": {},
-                "parentId": 1
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "菜单管理"
         ],
-        "summary": "删除菜单",
-        "description": "删除指定菜单节点",
-        "operationId": "delete__admin_system_menus",
-        "responses": {
-          "200": {
-            "description": "删除成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "integer",
-                      "description": "业务状态码"
-                    },
-                    "msg": {
-                      "type": "string",
-                      "description": "响应消息"
-                    },
-                    "data": {
-                      "type": "object",
-                      "description": "响应数据"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
         "requestBody": {
           "required": true,
           "content": {
@@ -611,9 +513,106 @@
                 ],
                 "properties": {
                   "id": {
-                    "type": "number",
-                    "example": 1,
-                    "description": "菜单 ID"
+                    "type": "integer",
+                    "description": "菜单 ID",
+                    "example": 1
+                  },
+                  "path": {
+                    "type": "string",
+                    "description": "菜单访问路径",
+                    "example": ""
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "菜单名称",
+                    "example": "testuser"
+                  },
+                  "component": {
+                    "type": "string",
+                    "description": "前端组件路径",
+                    "example": ""
+                  },
+                  "redirect": {
+                    "type": "string",
+                    "description": "重定向路径",
+                    "example": ""
+                  },
+                  "meta": {
+                    "type": "object",
+                    "description": "菜单元信息",
+                    "example": ""
+                  },
+                  "parentId": {
+                    "type": "integer",
+                    "description": "父级菜单 ID",
+                    "example": 1
+                  }
+                }
+              },
+              "example": {
+                "id": 1,
+                "path": "",
+                "name": "testuser",
+                "component": "",
+                "redirect": "",
+                "meta": "",
+                "parentId": 1
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "更新菜单成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "description": "业务状态码"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "description": "响应消息"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "响应数据"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "put_admin_system_menus"
+      },
+      "delete": {
+        "tags": [
+          "菜单管理"
+        ],
+        "summary": "删除菜单",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "id"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "菜单 ID",
+                    "example": 1
                   }
                 }
               },
@@ -622,7 +621,34 @@
               }
             }
           }
-        }
+        },
+        "responses": {
+          "200": {
+            "description": "删除菜单成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "description": "业务状态码"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "description": "响应消息"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "响应数据"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "delete_admin_system_menus"
       }
     },
     "/api/admin/system/roles": {
@@ -631,45 +657,15 @@
           "角色管理"
         ],
         "summary": "获取角色列表",
-        "description": "获取角色列表、绑定的菜单 ID 以及菜单选项",
-        "operationId": "get__admin_system_roles",
-        "responses": {
-          "200": {
-            "description": "获取成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "integer",
-                      "description": "业务状态码"
-                    },
-                    "msg": {
-                      "type": "string",
-                      "description": "响应消息"
-                    },
-                    "data": {
-                      "type": "object",
-                      "description": "响应数据"
-                    }
-                  }
-                }
-              }
-            }
+        "description": "含绑定的菜单 ID 和菜单选项",
+        "security": [
+          {
+            "bearerAuth": []
           }
-        }
-      },
-      "post": {
-        "tags": [
-          "角色管理"
         ],
-        "summary": "创建角色",
-        "description": "创建新角色并绑定菜单权限",
-        "operationId": "post__admin_system_roles",
         "responses": {
           "200": {
-            "description": "创建成功",
+            "description": "获取角色列表成功",
             "content": {
               "application/json": {
                 "schema": {
@@ -693,6 +689,19 @@
             }
           }
         },
+        "operationId": "get_admin_system_roles"
+      },
+      "post": {
+        "tags": [
+          "角色管理"
+        ],
+        "summary": "创建角色",
+        "description": "并绑定菜单权限",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -701,49 +710,37 @@
                 "type": "object",
                 "required": [
                   "roleName",
-                  "description",
-                  "routeIds"
+                  "description"
                 ],
                 "properties": {
                   "roleName": {
                     "type": "string",
-                    "example": "testuser",
-                    "description": "角色名称"
+                    "description": "角色名称",
+                    "example": "testuser"
                   },
                   "description": {
                     "type": "string",
-                    "example": "",
-                    "description": "角色描述"
+                    "description": "角色描述",
+                    "example": ""
                   },
                   "routeIds": {
                     "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "example": [],
-                    "description": "关联菜单 ID 列表"
+                    "description": "关联菜单 ID 列表",
+                    "example": 1
                   }
                 }
               },
               "example": {
                 "roleName": "testuser",
                 "description": "",
-                "routeIds": []
+                "routeIds": 1
               }
             }
           }
-        }
-      },
-      "put": {
-        "tags": [
-          "角色管理"
-        ],
-        "summary": "更新角色",
-        "description": "更新角色信息并重置角色菜单权限",
-        "operationId": "put__admin_system_roles",
+        },
         "responses": {
           "200": {
-            "description": "更新成功",
+            "description": "创建角色成功",
             "content": {
               "application/json": {
                 "schema": {
@@ -767,6 +764,19 @@
             }
           }
         },
+        "operationId": "post_admin_system_roles"
+      },
+      "put": {
+        "tags": [
+          "角色管理"
+        ],
+        "summary": "更新角色",
+        "description": "重置角色菜单权限",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -776,32 +786,28 @@
                 "required": [
                   "roleId",
                   "roleName",
-                  "description",
-                  "routeIds"
+                  "description"
                 ],
                 "properties": {
                   "roleId": {
-                    "type": "number",
-                    "example": 1,
-                    "description": "角色 ID"
+                    "type": "integer",
+                    "description": "角色 ID",
+                    "example": 1
                   },
                   "roleName": {
                     "type": "string",
-                    "example": "testuser",
-                    "description": "角色名称"
+                    "description": "角色名称",
+                    "example": "testuser"
                   },
                   "description": {
                     "type": "string",
-                    "example": "",
-                    "description": "角色描述"
+                    "description": "角色描述",
+                    "example": ""
                   },
                   "routeIds": {
                     "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "example": [],
-                    "description": "关联菜单 ID 列表"
+                    "description": "关联菜单 ID 列表",
+                    "example": 1
                   }
                 }
               },
@@ -809,22 +815,14 @@
                 "roleId": 1,
                 "roleName": "testuser",
                 "description": "",
-                "routeIds": []
+                "routeIds": 1
               }
             }
           }
-        }
-      },
-      "delete": {
-        "tags": [
-          "角色管理"
-        ],
-        "summary": "删除角色",
-        "description": "删除角色及其菜单权限绑定",
-        "operationId": "delete__admin_system_roles",
+        },
         "responses": {
           "200": {
-            "description": "删除成功",
+            "description": "更新角色成功",
             "content": {
               "application/json": {
                 "schema": {
@@ -848,6 +846,19 @@
             }
           }
         },
+        "operationId": "put_admin_system_roles"
+      },
+      "delete": {
+        "tags": [
+          "角色管理"
+        ],
+        "summary": "删除角色",
+        "description": "清理角色菜单权限绑定",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -859,9 +870,9 @@
                 ],
                 "properties": {
                   "roleId": {
-                    "type": "number",
-                    "example": 1,
-                    "description": "角色 ID"
+                    "type": "integer",
+                    "description": "角色 ID",
+                    "example": 1
                   }
                 }
               },
@@ -870,7 +881,34 @@
               }
             }
           }
-        }
+        },
+        "responses": {
+          "200": {
+            "description": "删除角色成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "description": "业务状态码"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "description": "响应消息"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "响应数据"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "delete_admin_system_roles"
       }
     },
     "/api/admin/system/users": {
@@ -879,11 +917,72 @@
           "用户管理"
         ],
         "summary": "获取用户列表",
-        "description": "分页获取后台用户列表，并返回角色选项",
-        "operationId": "get__admin_system_users",
+        "description": "分页查询并返回角色选项",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 1
+            },
+            "description": "当前页码",
+            "example": 1
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 1
+            },
+            "description": "每页数量",
+            "example": 1
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": ""
+            },
+            "description": "用户名或邮箱关键词",
+            "example": ""
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": ""
+            },
+            "description": "用户状态",
+            "example": ""
+          },
+          {
+            "name": "roleId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "example": 1
+            },
+            "description": "角色 ID",
+            "example": 1
+          }
+        ],
         "responses": {
           "200": {
-            "description": "获取成功",
+            "description": "获取用户列表成功",
             "content": {
               "application/json": {
                 "schema": {
@@ -907,63 +1006,7 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "required": true,
-            "description": "当前页码",
-            "schema": {
-              "type": "number",
-              "example": 1
-            },
-            "example": 1
-          },
-          {
-            "name": "pageSize",
-            "in": "query",
-            "required": true,
-            "description": "每页数量",
-            "schema": {
-              "type": "number",
-              "example": 1
-            },
-            "example": 1
-          },
-          {
-            "name": "keyword",
-            "in": "query",
-            "required": true,
-            "description": "用户名或邮箱关键词",
-            "schema": {
-              "type": "string",
-              "example": ""
-            },
-            "example": ""
-          },
-          {
-            "name": "status",
-            "in": "query",
-            "required": true,
-            "description": "用户状态",
-            "schema": {
-              "type": "string",
-              "example": ""
-            },
-            "example": ""
-          },
-          {
-            "name": "roleId",
-            "in": "query",
-            "required": true,
-            "description": "角色 ID",
-            "schema": {
-              "type": "number",
-              "example": 1
-            },
-            "example": 1
-          }
-        ]
+        "operationId": "get_admin_system_users"
       },
       "post": {
         "tags": [
@@ -971,33 +1014,11 @@
         ],
         "summary": "创建用户",
         "description": "新增后台用户并绑定角色",
-        "operationId": "post__admin_system_users",
-        "responses": {
-          "200": {
-            "description": "创建成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "integer",
-                      "description": "业务状态码"
-                    },
-                    "msg": {
-                      "type": "string",
-                      "description": "响应消息"
-                    },
-                    "data": {
-                      "type": "object",
-                      "description": "响应数据"
-                    }
-                  }
-                }
-              }
-            }
+        "security": [
+          {
+            "bearerAuth": []
           }
-        },
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -1007,65 +1028,59 @@
                 "required": [
                   "username",
                   "password",
-                  "gender",
-                  "age",
-                  "idCard",
                   "email",
-                  "address",
-                  "status",
-                  "avatar",
                   "roleId"
                 ],
                 "properties": {
                   "username": {
                     "type": "string",
-                    "example": "testuser",
-                    "description": "用户名"
+                    "description": "用户名",
+                    "example": "testuser"
                   },
                   "password": {
                     "type": "string",
-                    "example": "Test123456",
-                    "description": "登录密码"
+                    "description": "登录密码",
+                    "example": "Test123456"
                   },
                   "gender": {
                     "type": "string",
-                    "example": "",
-                    "description": "性别"
+                    "description": "性别",
+                    "example": ""
                   },
                   "age": {
-                    "type": "number",
-                    "example": 0,
-                    "description": "年龄"
+                    "type": "integer",
+                    "description": "年龄",
+                    "example": 0
                   },
                   "idCard": {
                     "type": "string",
-                    "example": "1",
-                    "description": "身份证号"
+                    "description": "身份证号",
+                    "example": "1"
                   },
                   "email": {
                     "type": "string",
-                    "example": "test@example.com",
-                    "description": "邮箱地址"
+                    "description": "邮箱地址",
+                    "example": "test@example.com"
                   },
                   "address": {
                     "type": "string",
-                    "example": "",
-                    "description": "联系地址"
+                    "description": "联系地址",
+                    "example": ""
                   },
                   "status": {
                     "type": "string",
-                    "example": "",
-                    "description": "用户状态"
+                    "description": "用户状态",
+                    "example": ""
                   },
                   "avatar": {
                     "type": "string",
-                    "example": "",
-                    "description": "头像地址"
+                    "description": "头像地址",
+                    "example": ""
                   },
                   "roleId": {
-                    "type": "number",
-                    "example": 1,
-                    "description": "角色 ID"
+                    "type": "integer",
+                    "description": "角色 ID",
+                    "example": 1
                   }
                 }
               },
@@ -1083,18 +1098,10 @@
               }
             }
           }
-        }
-      },
-      "put": {
-        "tags": [
-          "用户管理"
-        ],
-        "summary": "更新用户",
-        "description": "更新后台用户资料、角色或密码",
-        "operationId": "put__admin_system_users",
+        },
         "responses": {
           "200": {
-            "description": "更新成功",
+            "description": "创建用户成功",
             "content": {
               "application/json": {
                 "schema": {
@@ -1118,6 +1125,19 @@
             }
           }
         },
+        "operationId": "post_admin_system_users"
+      },
+      "put": {
+        "tags": [
+          "用户管理"
+        ],
+        "summary": "更新用户",
+        "description": "更新资料、角色或密码",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -1125,67 +1145,58 @@
               "schema": {
                 "type": "object",
                 "required": [
-                  "id",
-                  "password",
-                  "gender",
-                  "age",
-                  "idCard",
-                  "email",
-                  "address",
-                  "status",
-                  "avatar",
-                  "roleId"
+                  "id"
                 ],
                 "properties": {
                   "id": {
-                    "type": "number",
-                    "example": 1,
-                    "description": "用户 ID"
+                    "type": "integer",
+                    "description": "用户 ID",
+                    "example": 1
                   },
                   "password": {
                     "type": "string",
-                    "example": "Test123456",
-                    "description": "新密码"
+                    "description": "新密码",
+                    "example": "Test123456"
                   },
                   "gender": {
                     "type": "string",
-                    "example": "",
-                    "description": "性别"
+                    "description": "性别",
+                    "example": ""
                   },
                   "age": {
-                    "type": "number",
-                    "example": 0,
-                    "description": "年龄"
+                    "type": "integer",
+                    "description": "年龄",
+                    "example": 0
                   },
                   "idCard": {
                     "type": "string",
-                    "example": "1",
-                    "description": "身份证号"
+                    "description": "身份证号",
+                    "example": "1"
                   },
                   "email": {
                     "type": "string",
-                    "example": "test@example.com",
-                    "description": "邮箱地址"
+                    "description": "邮箱地址",
+                    "example": "test@example.com"
                   },
                   "address": {
                     "type": "string",
-                    "example": "",
-                    "description": "联系地址"
+                    "description": "联系地址",
+                    "example": ""
                   },
                   "status": {
                     "type": "string",
-                    "example": "",
-                    "description": "用户状态"
+                    "description": "用户状态",
+                    "example": ""
                   },
                   "avatar": {
                     "type": "string",
-                    "example": "",
-                    "description": "头像地址"
+                    "description": "头像地址",
+                    "example": ""
                   },
                   "roleId": {
-                    "type": "number",
-                    "example": 1,
-                    "description": "角色 ID"
+                    "type": "integer",
+                    "description": "角色 ID",
+                    "example": 1
                   }
                 }
               },
@@ -1203,18 +1214,10 @@
               }
             }
           }
-        }
-      },
-      "delete": {
-        "tags": [
-          "用户管理"
-        ],
-        "summary": "删除用户",
-        "description": "删除指定后台用户",
-        "operationId": "delete__admin_system_users",
+        },
         "responses": {
           "200": {
-            "description": "删除成功",
+            "description": "更新用户成功",
             "content": {
               "application/json": {
                 "schema": {
@@ -1238,6 +1241,18 @@
             }
           }
         },
+        "operationId": "put_admin_system_users"
+      },
+      "delete": {
+        "tags": [
+          "用户管理"
+        ],
+        "summary": "删除用户",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -1249,9 +1264,9 @@
                 ],
                 "properties": {
                   "id": {
-                    "type": "number",
-                    "example": 1,
-                    "description": "用户 ID"
+                    "type": "integer",
+                    "description": "用户 ID",
+                    "example": 1
                   }
                 }
               },
@@ -1260,7 +1275,34 @@
               }
             }
           }
-        }
+        },
+        "responses": {
+          "200": {
+            "description": "删除用户成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "description": "业务状态码"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "description": "响应消息"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "响应数据"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "delete_admin_system_users"
       }
     },
     "/api/user/login": {
@@ -1269,11 +1311,41 @@
           "用户模块"
         ],
         "summary": "用户登录",
-        "description": "验证用户名和密码，登录成功后将用户信息保存到 session",
-        "operationId": "post__user_login",
+        "description": "验证用户名和密码",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "username",
+                  "password"
+                ],
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "用户名（以字母开头，允许5-16字节，允许字母数字下划线）",
+                    "example": "testuser"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "密码（以字母开头，长度在6~18之间，只能包含字母、数字和下划线）",
+                    "example": "Test123456"
+                  }
+                }
+              },
+              "example": {
+                "username": "testuser",
+                "password": "Test123456"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "登录成功返回用户信息",
+            "description": "用户登录成功",
             "content": {
               "application/json": {
                 "schema": {
@@ -1297,36 +1369,7 @@
             }
           }
         },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "userName",
-                  "password"
-                ],
-                "properties": {
-                  "userName": {
-                    "type": "string",
-                    "example": "testuser",
-                    "description": "用户名（以字母开头，允许5-16字节，允许字母数字下划线）"
-                  },
-                  "password": {
-                    "type": "string",
-                    "example": "Test123456",
-                    "description": "密码（以字母开头，长度在6~18之间，只能包含字母、数字和下划线）"
-                  }
-                }
-              },
-              "example": {
-                "userName": "testuser",
-                "password": "Test123456"
-              }
-            }
-          }
-        }
+        "operationId": "post_user_login"
       }
     },
     "/api/user/findUserName": {
@@ -1335,11 +1378,34 @@
           "用户模块"
         ],
         "summary": "查询用户名是否存在",
-        "description": "查询数据库中是否已存在指定用户名，用于注册前的前端校验",
-        "operationId": "post__user_findUserName",
+        "description": "用于注册前的前端校验",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "username"
+                ],
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "要查询的用户名",
+                    "example": "testuser"
+                  }
+                }
+              },
+              "example": {
+                "username": "testuser"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "查询结果",
+            "description": "查询用户名是否存在成功",
             "content": {
               "application/json": {
                 "schema": {
@@ -1363,29 +1429,7 @@
             }
           }
         },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "userName"
-                ],
-                "properties": {
-                  "userName": {
-                    "type": "string",
-                    "example": "testuser",
-                    "description": "要查询的用户名"
-                  }
-                }
-              },
-              "example": {
-                "userName": "testuser"
-              }
-            }
-          }
-        }
+        "operationId": "post_user_findUserName"
       }
     },
     "/api/user/register": {
@@ -1394,11 +1438,41 @@
           "用户模块"
         ],
         "summary": "用户注册",
-        "description": "注册新用户，会先检查用户名是否已存在，不存在则创建新用户",
-        "operationId": "post__user_register",
+        "description": "检查用户名后创建新用户",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "username",
+                  "password"
+                ],
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "用户名（以字母开头，允许5-16字节，允许字母数字下划线）",
+                    "example": "testuser"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "密码（以字母开头，长度在6~18之间，只能包含字母、数字和下划线）",
+                    "example": "Test123456"
+                  }
+                }
+              },
+              "example": {
+                "username": "testuser",
+                "password": "Test123456"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "注册结果",
+            "description": "用户注册成功",
             "content": {
               "application/json": {
                 "schema": {
@@ -1422,36 +1496,16 @@
             }
           }
         },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "userName",
-                  "password"
-                ],
-                "properties": {
-                  "userName": {
-                    "type": "string",
-                    "example": "testuser",
-                    "description": "用户名（以字母开头，允许5-16字节，允许字母数字下划线）"
-                  },
-                  "password": {
-                    "type": "string",
-                    "example": "Test123456",
-                    "description": "密码（以字母开头，长度在6~18之间，只能包含字母、数字和下划线）"
-                  }
-                }
-              },
-              "example": {
-                "userName": "testuser",
-                "password": "Test123456"
-              }
-            }
-          }
-        }
+        "operationId": "post_user_register"
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }

@@ -9,10 +9,9 @@ import { businessCode, businessMsg } from '../../config/businessCode.js'
 import { httpCode } from '../../config/httpError.js'
 
 /**
- * @summary 获取角色列表
- * @description 获取角色列表、绑定的菜单 ID 以及菜单选项
+ * 获取角色列表 - 含绑定的菜单 ID 和菜单选项
  * @api GET /admin/system/roles
- * @returns {object} 200 - 获取成功
+ * @description 角色管理 - 后台角色及角色菜单权限的增删改查
  */
 const listRoles = async (ctx) => {
   const [roles, menus] = await Promise.all([adminRoleDao.listRoles(), adminMenuDao.listMenus()])
@@ -38,13 +37,12 @@ const listRoles = async (ctx) => {
 }
 
 /**
- * @summary 创建角色
- * @description 创建新角色并绑定菜单权限
+ * 创建角色 - 并绑定菜单权限
  * @api POST /admin/system/roles
- * @param {string} roleName - 角色名称
- * @param {string} description - 角色描述
- * @param {array} routeIds - 关联菜单 ID 列表
- * @returns {object} 200 - 创建成功
+ * @description 角色管理
+ * @body {string} roleName - 角色名称
+ * @body {string} description - 角色描述
+ * @body {array} [routeIds] - 关联菜单 ID 列表
  */
 const createRole = async (ctx) => {
   const { roleName, description, routeIds } = ctx.request.body
@@ -73,14 +71,13 @@ const createRole = async (ctx) => {
 }
 
 /**
- * @summary 更新角色
- * @description 更新角色信息并重置角色菜单权限
+ * 更新角色 - 重置角色菜单权限
  * @api PUT /admin/system/roles
- * @param {number} roleId - 角色 ID
- * @param {string} roleName - 角色名称
- * @param {string} description - 角色描述
- * @param {array} routeIds - 关联菜单 ID 列表
- * @returns {object} 200 - 更新成功
+ * @description 角色管理
+ * @body {integer} roleId - 角色 ID
+ * @body {string} roleName - 角色名称
+ * @body {string} description - 角色描述
+ * @body {array} [routeIds] - 关联菜单 ID 列表
  */
 const updateRole = async (ctx) => {
   const { roleId, roleName, description, routeIds } = ctx.request.body
@@ -114,11 +111,10 @@ const updateRole = async (ctx) => {
 }
 
 /**
- * @summary 删除角色
- * @description 删除角色及其菜单权限绑定
+ * 删除角色 - 清理角色菜单权限绑定
  * @api DELETE /admin/system/roles
- * @param {number} roleId - 角色 ID
- * @returns {object} 200 - 删除成功
+ * @description 角色管理
+ * @body {integer} roleId - 角色 ID
  */
 const deleteRole = async (ctx) => {
   const { roleId } = ctx.request.body
