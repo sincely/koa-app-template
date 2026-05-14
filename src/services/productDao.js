@@ -1,4 +1,4 @@
-import { query } from '../../utils/db.js'
+import { query } from '../utils/db.js'
 
 // 连接数据库获取商品分类
 const GetCategory = async () => {

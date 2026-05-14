@@ -311,7 +311,7 @@
           "后台认证"
         ],
         "summary": "后台退出登录",
-        "description": "退出当前后台登录会话",
+        "description": "将当前 Token 加入 Redis 黑名单，确保退出后 Token 立即失效",
         "operationId": "post__admin_auth_logout",
         "responses": {
           "200": {

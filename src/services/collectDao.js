@@ -1,4 +1,4 @@
-import { query } from '../../utils/db.js'
+import { query } from '../utils/db.js'
 
 // 连接数据库,把收藏商品信息插入数据库
 const AddCollect = async (user_id, product_id, timeTemp) => {

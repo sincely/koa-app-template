@@ -1,4 +1,4 @@
-import { query } from '../../utils/db.js'
+import { query } from '../utils/db.js'
 
 // 管理员用户信息基础查询片段（含角色信息）
 const getAdminUserBaseSql = `

@@ -1,4 +1,4 @@
-import { query } from '../../utils/db.js'
+import { query } from '../utils/db.js'
 
 // 连接数据库获取所有的订单id
 const GetOrderGroup = async (user_id) => {

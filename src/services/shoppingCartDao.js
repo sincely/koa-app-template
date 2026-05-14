@@ -1,4 +1,4 @@
-import { query } from '../../utils/db.js'
+import { query } from '../utils/db.js'
 
 // 获取购物车信息
 const GetShoppingCart = async (user_id) => {

@@ -1,4 +1,4 @@
-import { query } from '../../utils/db.js'
+import { query } from '../utils/db.js'
 
 /**
  * 根据角色 ID 查询可访问菜单列表。

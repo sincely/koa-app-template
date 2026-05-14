@@ -3,8 +3,8 @@
  * @description 处理后台角色及角色菜单权限的增删改查
  */
 
-import adminRoleDao from '../../models/dao/adminRoleDao.js'
-import adminMenuDao from '../../models/dao/adminMenuDao.js'
+import adminRoleDao from '../../services/adminRoleDao.js'
+import adminMenuDao from '../../services/adminMenuDao.js'
 import { businessCode, businessMsg } from '../../config/businessCode.js'
 import { httpCode } from '../../config/httpError.js'
 

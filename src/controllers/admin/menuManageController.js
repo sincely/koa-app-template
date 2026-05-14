@@ -3,7 +3,7 @@
  * @description 处理后台菜单管理相关的增删改查
  */
 
-import adminMenuDao from '../../models/dao/adminMenuDao.js'
+import adminMenuDao from '../../services/adminMenuDao.js'
 import { buildMenuTree } from '../../utils/adminPermission.js'
 import { businessCode, businessMsg } from '../../config/businessCode.js'
 import { httpCode } from '../../config/httpError.js'

@@ -1,4 +1,4 @@
-import { getConnection, query } from '../../utils/db.js'
+import { getConnection, query } from '../utils/db.js'
 
 /**
  * 查询菜单列表（按父子关系排序）。

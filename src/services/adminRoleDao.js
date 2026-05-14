@@ -1,4 +1,4 @@
-import { getConnection, query } from '../../utils/db.js'
+import { getConnection, query } from '../utils/db.js'
 
 /**
  * 查询角色列表，并统计每个角色的用户数。

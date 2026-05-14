@@ -3,8 +3,8 @@
  * @description 处理后台用户管理相关的增删改查
  */
 
-import adminUserDao from '../../models/dao/adminUserDao.js'
-import adminRoleDao from '../../models/dao/adminRoleDao.js'
+import adminUserDao from '../../services/adminUserDao.js'
+import adminRoleDao from '../../services/adminRoleDao.js'
 import { businessCode, businessMsg } from '../../config/businessCode.js'
 import { httpCode } from '../../config/httpError.js'
 import { hashPassword } from '../../utils/password.js'

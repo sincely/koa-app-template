@@ -1,4 +1,4 @@
-import adminPermissionDao from '../models/dao/adminPermissionDao.js'
+import adminPermissionDao from '../services/adminPermissionDao.js'
 import { businessCode, businessMsg } from '../config/businessCode.js'
 import { createErrorResponse } from '../utils/createResponse.js'
 import { httpCode } from '../config/httpError.js'
