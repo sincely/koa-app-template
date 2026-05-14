@@ -3,6 +3,46 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.0.5](https://github.com/sincely/koa-app-template/compare/v1.0.4...v1.0.5) (2026-05-14)
+
+### ✨ Features
+
+* **admin:** 新增后台管理模块，包含用户、角色、菜单权限管理 ([7a1b38e](https://github.com/sincely/koa-app-template/commit/7a1b38e26648f94ef1ecd291fdb8eaec83ce5799))
+* 添加会话支持并改进代码格式 ([18244ec](https://github.com/sincely/koa-app-template/commit/18244ec4fb089021411be2c97d65e817c6703c73))
+* 添加部署脚本并优化构建流程 ([fcdb78e](https://github.com/sincely/koa-app-template/commit/fcdb78eb9d32a99d8a5c1c2305664502a5e763a5))
+
+### 🐞 Bug Fixes
+
+* 提升架构 ([e2ca1b1](https://github.com/sincely/koa-app-template/commit/e2ca1b1b910735c40c1dc87f91c78db58adcebd5))
+
+### 📝 Documentation
+
+* 为多个模块添加详细的JSDoc注释和代码说明 ([05d2a73](https://github.com/sincely/koa-app-template/commit/05d2a7314dfc0960c28c986ad9f0e357f2ad58da))
+* 新增 MySQL 与后台管理相关指南文档 ([0146926](https://github.com/sincely/koa-app-template/commit/01469264eca8cd28c664008ef2c93c61f1d9ac8f))
+* 更新架构文档中的技术栈版本与流程图 ([4bdc4d6](https://github.com/sincely/koa-app-template/commit/4bdc4d6fdce476aeacaaac6b632ffa9309451ff6))
+* 添加 mock API 文档 ([03e88c6](https://github.com/sincely/koa-app-template/commit/03e88c607e21b0be3ad1d24dfd284ca46422f9ce))
+* 添加PM2详细使用指南文档 ([3bd29a1](https://github.com/sincely/koa-app-template/commit/3bd29a108b8f27a28c844474cdc52079db3c27dc))
+* 添加部署指南文档并调整构建脚本 ([460e03e](https://github.com/sincely/koa-app-template/commit/460e03ec28b5b00ffd4b559e4f21d96dec0779e9))
+
+### 🔧 Chores
+
+* 优化构建脚本与生产环境部署流程 ([1bc59ec](https://github.com/sincely/koa-app-template/commit/1bc59ec454feffc049e653281b876836cfe21ca0))
+* 在 .prettierignore 中添加 pnpm-lock.yaml 文件 ([09a0223](https://github.com/sincely/koa-app-template/commit/09a0223bf5aaf34f406cd0b15630b761395b6906))
+* 将内联 prepare 脚本提取到独立文件 ([80c7e93](https://github.com/sincely/koa-app-template/commit/80c7e93d123b7f5567ae1112f5a982c589dbde4c))
+* 更新.gitignore并添加VSCode调试配置 ([46f3607](https://github.com/sincely/koa-app-template/commit/46f36070bc150e26d22e59461e2ae8960f98237e))
+* 更新jsconfig.json以忽略过时警告 ([4bc36c7](https://github.com/sincely/koa-app-template/commit/4bc36c7f628cba30ab188dd5edc27c6a756ea384))
+* 添加 swagger 相关依赖并优化 nodemon 配置 ([45aa97b](https://github.com/sincely/koa-app-template/commit/45aa97b927f0bcba7a34d0ce1a87100c11ba26b4))
+* 清理依赖并更新文档 ([03ed827](https://github.com/sincely/koa-app-template/commit/03ed827dafd53fc126d3fb6306c554c556a7f269))
+* 禁用详细日志并添加事件处理程序 ([8988f60](https://github.com/sincely/koa-app-template/commit/8988f602481e66cd5999f9792813fd6e24533f3d))
+* 移除已弃用的TypeScript忽略警告配置 ([61ec9f7](https://github.com/sincely/koa-app-template/commit/61ec9f72d21e639bbee331c9f8bbdf08d3ad2a0c))
+* 移除过时的技术指南文档 ([0beb178](https://github.com/sincely/koa-app-template/commit/0beb178d51764bfe528e00eaa2a44018a5bfa1a4))
+
+### ♻️ Code Refactoring
+
+* 将常量命名从大写蛇形改为小写驼峰 ([915c63a](https://github.com/sincely/koa-app-template/commit/915c63a6bfc7139943892f22e99f90f6705a7631))
+* 调整服务层导入路径并新增路径映射 ([69bd892](https://github.com/sincely/koa-app-template/commit/69bd892017182ba6de81e1ef2f4f6c4077488320))
+* 重构配置文件为模块化结构以提高可维护性 ([476afc9](https://github.com/sincely/koa-app-template/commit/476afc97ae7f503ecd195db2555a4e93eff75fca))
+
 ## [1.0.4](https://github.com/sincely/koa-app-template/compare/v1.0.3...v1.0.4) (2026-04-02)
 
 ### ✨ Features

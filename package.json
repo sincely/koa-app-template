@@ -1,6 +1,6 @@
 {
   "name": "koa2-app-template",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Koa2快速启动基础框架",
   "type": "module",
   "main": "src/app.js",
