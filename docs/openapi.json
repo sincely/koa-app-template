@@ -53,9 +53,7 @@
   "paths": {
     "/api/admin/auth/register": {
       "post": {
-        "tags": [
-          "后台认证"
-        ],
+        "tags": ["后台认证"],
         "summary": "后台注册",
         "description": "注册后台账号并绑定默认角色",
         "security": [],
@@ -65,12 +63,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "username",
-                  "password",
-                  "confirmPassword",
-                  "email"
-                ],
+                "required": ["username", "password", "confirmPassword", "email"],
                 "properties": {
                   "username": {
                     "type": "string",
@@ -134,9 +127,7 @@
     },
     "/api/admin/auth/login": {
       "post": {
-        "tags": [
-          "后台认证"
-        ],
+        "tags": ["后台认证"],
         "summary": "后台登录",
         "description": "返回 token、用户信息、菜单和权限数据",
         "security": [],
@@ -146,10 +137,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "username",
-                  "password"
-                ],
+                "required": ["username", "password"],
                 "properties": {
                   "username": {
                     "type": "string",
@@ -201,9 +189,7 @@
     },
     "/api/admin/auth/profile": {
       "get": {
-        "tags": [
-          "后台认证"
-        ],
+        "tags": ["后台认证"],
         "summary": "获取当前用户信息",
         "security": [
           {
@@ -241,9 +227,7 @@
     },
     "/api/admin/auth/menus": {
       "get": {
-        "tags": [
-          "后台认证"
-        ],
+        "tags": ["后台认证"],
         "summary": "获取当前用户菜单",
         "security": [
           {
@@ -281,9 +265,7 @@
     },
     "/api/admin/auth/permissions": {
       "get": {
-        "tags": [
-          "后台认证"
-        ],
+        "tags": ["后台认证"],
         "summary": "获取当前用户权限",
         "security": [
           {
@@ -321,9 +303,7 @@
     },
     "/api/admin/auth/logout": {
       "post": {
-        "tags": [
-          "后台认证"
-        ],
+        "tags": ["后台认证"],
         "summary": "后台退出登录",
         "description": "Token 加入 Redis 黑名单",
         "security": [
@@ -362,9 +342,7 @@
     },
     "/api/admin/system/menus": {
       "get": {
-        "tags": [
-          "菜单管理"
-        ],
+        "tags": ["菜单管理"],
         "summary": "获取菜单列表",
         "description": "平铺列表和树形结构",
         "security": [
@@ -401,9 +379,7 @@
         "operationId": "get_admin_system_menus"
       },
       "post": {
-        "tags": [
-          "菜单管理"
-        ],
+        "tags": ["菜单管理"],
         "summary": "创建菜单",
         "security": [
           {
@@ -416,10 +392,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "path",
-                  "name"
-                ],
+                "required": ["path", "name"],
                 "properties": {
                   "path": {
                     "type": "string",
@@ -493,9 +466,7 @@
         "operationId": "post_admin_system_menus"
       },
       "put": {
-        "tags": [
-          "菜单管理"
-        ],
+        "tags": ["菜单管理"],
         "summary": "更新菜单",
         "security": [
           {
@@ -508,9 +479,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "id"
-                ],
+                "required": ["id"],
                 "properties": {
                   "id": {
                     "type": "integer",
@@ -590,9 +559,7 @@
         "operationId": "put_admin_system_menus"
       },
       "delete": {
-        "tags": [
-          "菜单管理"
-        ],
+        "tags": ["菜单管理"],
         "summary": "删除菜单",
         "security": [
           {
@@ -605,9 +572,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "id"
-                ],
+                "required": ["id"],
                 "properties": {
                   "id": {
                     "type": "integer",
@@ -653,9 +618,7 @@
     },
     "/api/admin/system/roles": {
       "get": {
-        "tags": [
-          "角色管理"
-        ],
+        "tags": ["角色管理"],
         "summary": "获取角色列表",
         "description": "含绑定的菜单 ID 和菜单选项",
         "security": [
@@ -692,9 +655,7 @@
         "operationId": "get_admin_system_roles"
       },
       "post": {
-        "tags": [
-          "角色管理"
-        ],
+        "tags": ["角色管理"],
         "summary": "创建角色",
         "description": "并绑定菜单权限",
         "security": [
@@ -708,10 +669,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "roleName",
-                  "description"
-                ],
+                "required": ["roleName", "description"],
                 "properties": {
                   "roleName": {
                     "type": "string",
@@ -767,9 +725,7 @@
         "operationId": "post_admin_system_roles"
       },
       "put": {
-        "tags": [
-          "角色管理"
-        ],
+        "tags": ["角色管理"],
         "summary": "更新角色",
         "description": "重置角色菜单权限",
         "security": [
@@ -783,11 +739,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "roleId",
-                  "roleName",
-                  "description"
-                ],
+                "required": ["roleId", "roleName", "description"],
                 "properties": {
                   "roleId": {
                     "type": "integer",
@@ -849,9 +801,7 @@
         "operationId": "put_admin_system_roles"
       },
       "delete": {
-        "tags": [
-          "角色管理"
-        ],
+        "tags": ["角色管理"],
         "summary": "删除角色",
         "description": "清理角色菜单权限绑定",
         "security": [
@@ -865,9 +815,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "roleId"
-                ],
+                "required": ["roleId"],
                 "properties": {
                   "roleId": {
                     "type": "integer",
@@ -913,9 +861,7 @@
     },
     "/api/admin/system/users": {
       "get": {
-        "tags": [
-          "用户管理"
-        ],
+        "tags": ["用户管理"],
         "summary": "获取用户列表",
         "description": "分页查询并返回角色选项",
         "security": [
@@ -1009,9 +955,7 @@
         "operationId": "get_admin_system_users"
       },
       "post": {
-        "tags": [
-          "用户管理"
-        ],
+        "tags": ["用户管理"],
         "summary": "创建用户",
         "description": "新增后台用户并绑定角色",
         "security": [
@@ -1025,12 +969,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "username",
-                  "password",
-                  "email",
-                  "roleId"
-                ],
+                "required": ["username", "password", "email", "roleId"],
                 "properties": {
                   "username": {
                     "type": "string",
@@ -1128,9 +1067,7 @@
         "operationId": "post_admin_system_users"
       },
       "put": {
-        "tags": [
-          "用户管理"
-        ],
+        "tags": ["用户管理"],
         "summary": "更新用户",
         "description": "更新资料、角色或密码",
         "security": [
@@ -1144,9 +1081,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "id"
-                ],
+                "required": ["id"],
                 "properties": {
                   "id": {
                     "type": "integer",
@@ -1244,9 +1179,7 @@
         "operationId": "put_admin_system_users"
       },
       "delete": {
-        "tags": [
-          "用户管理"
-        ],
+        "tags": ["用户管理"],
         "summary": "删除用户",
         "security": [
           {
@@ -1259,9 +1192,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "id"
-                ],
+                "required": ["id"],
                 "properties": {
                   "id": {
                     "type": "integer",
@@ -1307,9 +1238,7 @@
     },
     "/api/user/login": {
       "post": {
-        "tags": [
-          "用户模块"
-        ],
+        "tags": ["用户模块"],
         "summary": "用户登录",
         "description": "验证用户名和密码",
         "security": [],
@@ -1319,10 +1248,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "username",
-                  "password"
-                ],
+                "required": ["username", "password"],
                 "properties": {
                   "username": {
                     "type": "string",
@@ -1374,9 +1300,7 @@
     },
     "/api/user/findUserName": {
       "post": {
-        "tags": [
-          "用户模块"
-        ],
+        "tags": ["用户模块"],
         "summary": "查询用户名是否存在",
         "description": "用于注册前的前端校验",
         "security": [],
@@ -1386,9 +1310,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "username"
-                ],
+                "required": ["username"],
                 "properties": {
                   "username": {
                     "type": "string",
@@ -1434,9 +1356,7 @@
     },
     "/api/user/register": {
       "post": {
-        "tags": [
-          "用户模块"
-        ],
+        "tags": ["用户模块"],
         "summary": "用户注册",
         "description": "检查用户名后创建新用户",
         "security": [],
@@ -1446,10 +1366,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "username",
-                  "password"
-                ],
+                "required": ["username", "password"],
                 "properties": {
                   "username": {
                     "type": "string",

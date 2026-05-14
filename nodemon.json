@@ -1,14 +1,8 @@
 {
   "restartable": "rs",
-  "ignore": [
-    ".git",
-    ".svn",
-    "node_modules/**/node_modules"
-  ],
+  "ignore": [".git", ".svn", "node_modules/**/node_modules"],
   "verbose": false,
-  "watch": [
-    "src"
-  ],
+  "watch": ["src"],
   "env": {
     "NODE_ENV": "development",
     "REMOTE_ADDR": ""
