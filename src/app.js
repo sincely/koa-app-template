@@ -12,14 +12,14 @@ import corsConfig from './config/cors.js'
 import { bodyParserConfig } from './config/koaBodyConfig.js'
 
 // 中间件
-import requestId from './middleware/requestId.js'
-import loggerMiddleware from './middleware/logger.js'
-import error from './middleware/error.js'
-import rewriteUrl from './middleware/rewriteUrl.js'
-import compress from './middleware/compress.js'
+import requestId from './middlewares/requestId.js'
+import loggerMiddleware from './middlewares/logger.js'
+import error from './middlewares/error.js'
+import rewriteUrl from './middlewares/rewriteUrl.js'
+import compress from './middlewares/compress.js'
 
 // 路由
-import Routers from './routers/index.js'
+import Routers from './routes/index.js'
 
 // 插件
 import { registerSwagger } from './plugins/swagger.js'

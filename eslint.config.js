@@ -11,7 +11,6 @@ export default [
     // 定义全局变量
     languageOptions: {
       globals: {
-        ...globals.browser,
         ...globals.node
       }
     },
@@ -69,7 +68,7 @@ export default [
       'prefer-const': 'error', // 要求使用const声明那些声明后不再被修改的变量
       'prefer-rest-params': 'error', // 要求使用剩余参数而不是 arguments
       'no-useless-escape': 'error', // 禁用不必要的转义字符
-      'no-prototype-builtins': 'error', // 禁止直接使用 Object.prototypes 的内置属性
+      // 'no-prototype-builtins' 已由 recommended 包含，无需重复
       'no-fallthrough': 'error', // 禁止 case 语句落空
       'no-extra-boolean-cast': 'error', // 禁止不必要的布尔转换
       'no-case-declarations': 'error', // 不允许在 case 子句中使用词法声明
@@ -90,17 +89,16 @@ export default [
       ]
     }
   },
-  // 忽略文件
   {
     ignores: [
       '**/dist',
       '.vscode',
       '.idea',
-      '.d.ts',
-      '*.sh',
+      '**/*.d.ts',
+      '**/*.sh',
       '**/node_modules',
       '**/docs/assets/**',
-      '*.md',
+      '**/*.md',
       '*.woff',
       '*.woff2',
       '*.eot',

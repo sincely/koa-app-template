@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { UserRole } from './userEntitySchema.js'
+import { UserRole } from './models/userEntitySchema.js'
 
 // 通用注册请求体（默认普通用户角色）
 export const RegisterUserSchema = z.object({

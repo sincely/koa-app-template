@@ -23,6 +23,55 @@ Windows 终端如果中文日志乱码：
 
 npm run start:win
 ```
+koa-server/
+├── src/
+│   ├── config/              # 配置中心
+│   │   ├── server.js        # 服务器配置
+│   │   ├── database.js      # 数据库配置
+│   │   ├── cors.js          # 跨域配置
+│   │   ├── logger.js        # 日志配置
+│   │   └── ...
+│   ├── controllers/         # 控制层（参数校验、调用 Service）
+│   │   ├── auth/authController.js
+│   │   └── users/userController.js
+│   ├── services/            # 业务逻辑层（DAO 数据访问）
+│   ├── models/              # 数据模型层（ORM 定义，待扩展）
+│   ├── middlewares/         # 自定义中间件
+│   │   ├── error.js         # 全局异常捕获
+│   │   ├── authenticate.js  # JWT 认证
+│   │   ├── authorize.js     # 权限校验
+│   │   ├── logger.js        # 请求日志
+│   │   ├── rateLimiter.js   # 限流
+│   │   └── validationMiddleware.js # 参数校验
+│   ├── routes/              # 路由层
+│   │   ├── index.js         # 路由聚合
+│   │   └── modules/         # 按业务模块拆分
+│   ├── schemas/             # Zod 校验 Schema
+│   ├── utils/               # 工具函数
+│   │   ├── createResponse.js # 统一响应格式
+│   │   ├── encrypt.js       # 加密工具
+│   │   ├── jwt.js           # JWT 工具
+│   │   └── ...
+│   ├── plugins/             # 插件（Swagger 等）
+│   ├── jobs/                # 定时任务（Bull 队列）
+│   ├── events/              # 事件监听（EventEmitter，待扩展）
+│   ├── app.js               # 应用入口
+│   └── worker.js            # 后台 Worker
+├── scripts/                 # 构建/部署脚本
+├── .env.development
+├── .env.production
+├── ecosystem.config.cjs     # PM2 配置
+└── package.json
+
+
+| 层级             | 职责              | 示例                                                    |
+| -------------- | --------------- | ----------------------------------------------------- |
+| **Router**     | 路由定义、中间件挂载      | `router.get('/users', auth, handler)`                 |
+| **Controller** | 参数校验、调用 Service | `ctx.validate(schema)` → `await UserService.create()` |
+| **Service**    | 业务逻辑、事务处理       | 登录逻辑、订单状态流转                                           |
+| **Model**      | 数据访问、ORM 操作     | Knex 查询构建                                             |
+| **Middleware** | 横切关注点           | 认证、日志、限流、异常                                           |
+| **Utils**      | 纯工具函数           | 加密、日期格式化、响应封装                                         |
 
 
 ## Apifox 集成（不使用装饰器）

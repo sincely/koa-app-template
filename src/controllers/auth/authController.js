@@ -3,15 +3,15 @@
  * @description 处理后台登录、注册、退出和权限信息获取
  */
 
-import adminAuthDao from '../../services/adminAuthDao.js'
-import adminPermissionDao from '../../services/adminPermissionDao.js'
-import { httpCode } from '../../config/httpError.js'
-import { businessCode, businessMsg } from '../../config/businessCode.js'
-import { defaultAdminRoleName } from '../../config/admin.js'
-import { hashPassword, comparePassword } from '../../utils/password.js'
-import { generateToken, decodeToken } from '../../utils/jwt.js'
-import { buildMenuTree, extractPermissionCodes } from '../../utils/adminPermission.js'
-import { getRedisClient } from '../../utils/redis.js'
+import adminAuthDao from '../services/adminAuthDao.js'
+import adminPermissionDao from '../services/adminPermissionDao.js'
+import { httpCode } from '../config/httpError.js'
+import { businessCode, businessMsg } from '../config/businessCode.js'
+import { defaultAdminRoleName } from '../config/admin.js'
+import { hashPassword, comparePassword } from '../utils/password.js'
+import { generateToken, decodeToken } from '../utils/jwt.js'
+import { buildMenuTree, extractPermissionCodes } from '../utils/adminPermission.js'
+import { getRedisClient } from '../utils/redis.js'
 
 const formatUserInfo = (user) => {
   return {
